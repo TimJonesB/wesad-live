@@ -1,4 +1,7 @@
-add_executable(client client.cpp)
+add_executable(client
+               client.cpp
+               subscriber.cpp
+               run_client.cpp)
 
 find_package(HDF5 REQUIRED COMPONENTS C CXX)
 find_package(cppzmq REQUIRED)
