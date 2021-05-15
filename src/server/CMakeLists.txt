@@ -5,7 +5,7 @@ add_executable(server
                h5_data.cpp
                )
 
-find_package(HDF5 REQUIRED COMPONENTS C CXX)
+find_package(HDF5 REQUIRED COMPONENTS C)
 find_package(cppzmq REQUIRED)
 target_include_directories(server PUBLIC
                             ${CMAKE_CURRENT_SOURCE_DIR}
@@ -14,6 +14,6 @@ target_include_directories(server PUBLIC
                           )
 
 target_link_libraries (server
-                       ${HDF5_CXX_LIBRARIES}
+                       ${HDF5_C_LIBRARIES}
                        cppzmq
                       )

@@ -3,7 +3,7 @@ add_executable(client
                subscriber.cpp
                run_client.cpp)
 
-find_package(HDF5 REQUIRED COMPONENTS C CXX)
+find_package(HDF5 REQUIRED COMPONENTS C)
 find_package(cppzmq REQUIRED)
 target_include_directories(client PUBLIC
                             ${CMAKE_CURRENT_SOURCE_DIR}
@@ -12,6 +12,6 @@ target_include_directories(client PUBLIC
                           )
 
 target_link_libraries (client
-                       ${HDF5_CXX_LIBRARIES}
+                       ${HDF5_C_LIBRARIES}
                        cppzmq
                       )
