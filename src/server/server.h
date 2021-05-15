@@ -9,13 +9,14 @@ class Server {
 
 public:
     Server() = delete;
-    Server(zmq::context_t &ctx, const std::string tcp_port);
+    Server(std::string name, zmq::context_t &ctx, const std::string tcp_port);
     ~Server() = default;
 
     int run();
 private:
     Publisher publisher;
     H5Data data;
+    std::string name;
 };
 
 

@@ -6,7 +6,7 @@
 #include <thread>
 #include <chrono>
 
-Client::Client(zmq::context_t &ctx, const std::string tcp_port) : subscriber {ctx, tcp_port} {}
+Client::Client(zmq::context_t &ctx, const std::string tcp_portsm) : subscriber {ctx, tcp_portsm} {}
 
 int Client::run() {
     while(1) {

@@ -5,6 +5,7 @@
 #include <thread>
 
 int main() {
+    // run_it();
     std::future<int> f1 = std::async(std::launch::async,
                                      [](){return system("./src/server/server");});
 
