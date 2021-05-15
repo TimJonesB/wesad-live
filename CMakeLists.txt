@@ -10,7 +10,7 @@ add_executable(WesadLive demo.cpp)
 
 add_subdirectory(src)
 
-find_package(HDF5 REQUIRED COMPONENTS C CXX)
+find_package(HDF5 REQUIRED COMPONENTS C)
 find_package(Threads REQUIRED)
 
 target_include_directories(WesadLive PUBLIC
@@ -20,7 +20,7 @@ target_include_directories(WesadLive PUBLIC
                           )
 
 target_link_libraries (WesadLive 
-                       ${HDF5_CXX_LIBRARIES}
+                       ${HDF5_C_LIBRARIES}
                        src
                        ${CMAKE_THREAD_LIBS_INIT}
                        )

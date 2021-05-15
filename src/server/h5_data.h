@@ -2,7 +2,6 @@
 #define H5DATAH
 
 #include <string>
-#include "H5Cpp.h"
 
 class H5Data {
 public:
@@ -13,7 +12,7 @@ public:
     int read_chunk(std::string path, const size_t a, const size_t b);
 
 private:
-    H5::H5File h5f = H5S_NULL;
+    std::string h5fname;
 
 };
 

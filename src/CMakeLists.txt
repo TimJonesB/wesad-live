@@ -5,7 +5,7 @@ add_subdirectory(server)
 add_subdirectory(client)
 
 
-find_package(HDF5 REQUIRED COMPONENTS C CXX)
+find_package(HDF5 REQUIRED COMPONENTS C)
 target_include_directories(src PUBLIC
                             ${CMAKE_CURRENT_SOURCE_DIR}
                             ${PROJECT_BINARY_DIR}
@@ -13,7 +13,7 @@ target_include_directories(src PUBLIC
                           )
 
 target_link_libraries (src 
-                       ${HDF5_CXX_LIBRARIES}
+                       ${HDF5_C_LIBRARIES}
                       )
 
 
