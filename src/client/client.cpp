@@ -12,6 +12,6 @@ int Client::run() {
     while(1) {
         zmq::message_t msgs;
         auto res = this->subscriber.sub.recv(msgs, zmq::recv_flags::none);
-        std::cout << "Received: " << msgs.to_string() << std::endl;
+        // std::cout << "Received: " << msgs.to_string() << std::endl;
     }
 }
