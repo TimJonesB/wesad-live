@@ -9,7 +9,7 @@ class Server {
 
 public:
     Server() = delete;
-    Server(std::string name, zmq::context_t &ctx, const std::string tcp_port);
+    Server(std::string name, zmq::context_t &ctx);
     ~Server() = default;
 
     int run();

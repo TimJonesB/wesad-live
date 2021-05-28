@@ -6,37 +6,36 @@
 #include "server.h"
 #include "h5_data.h"
 #include "publisher.h"
+#include "h5_sandbox.h"
 
 
-Server::Server(std::string name, zmq::context_t &ctx, const std::string tcp_port) :
+Server::Server(std::string name, zmq::context_t &ctx) :
         name{name},
-        publisher {ctx, tcp_port},
-        data {H5Data("../data/outfile.h5")}
+        publisher {ctx, Config::ports.at(name)},
+        data {H5Data("../data/S2.h5")}
     {}
 
 
 int Server::run() {
-
     int i = 0;
-    if (this->name == "server0") {
-        i = 100000;
-    }
-    if (this->name == "server1") {
-        std::cout << "yep!" << std::endl;
-        i = 200000;
-    }
-    if (this->name == "server2") {
-        i = 300000;
-    }
-    while(i<400000) {
-
-        int d = this->data.read_point("label", i);
-        d = i;
-        zmq::message_t msg(std::to_string(d));
-        std::cout << this->name << " sending message: " << msg.to_string() << std::endl;
-        auto res = this->publisher.pub.send(msg, zmq::send_flags::none);
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+    std::cout << "Running " << this->name << std::endl;
+    auto start = std::chrono::high_resolution_clock::now();
+    int dt_us = int(1e6/Config::fs.at(this->name));
+    std::cout << "dt microsecs: " << dt_us << std::endl;
+    while(i<3000) {
+        double d = 0.0;
+        if (!this->name.empty()) {
+            d = this->data.read_point<double>(this->name, i);
+        }
+        else {
+            d = -1.0;
+        }
+        auto res = this->publisher.send(d);
+        std::this_thread::sleep_for(std::chrono::microseconds(dt_us));
         i++;
     }
+    auto finish = std::chrono::high_resolution_clock::now();
+    auto secs = std::chrono::duration_cast<std::chrono::seconds>(finish-start);
+    std::cout << this->name << " finished in " << secs.count() << " seconds."  << std::endl;
     return 0;
 }
