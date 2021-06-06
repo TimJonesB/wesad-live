@@ -15,9 +15,3 @@ target_include_directories(src PUBLIC
 target_link_libraries (src 
                        ${HDF5_C_LIBRARIES}
                       )
-
-
-# add_custom_target(run_them_together_easily
-#     COMMAND $<TARGET_FILE:server>
-#     COMMAND $<TARGET_FILE:client>
-# )
