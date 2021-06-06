@@ -6,7 +6,7 @@
 #include <future>
 
 #include "server.h"
-#include "config.h"
+#include "data_config.h"
 
 
 int main() {

@@ -3,7 +3,7 @@
 #include <future>
 #include <thread>
 
-#include "config.h"
+#include "data_config.h"
 
 int main() {
     std::future<int> f1 = std::async(std::launch::async,

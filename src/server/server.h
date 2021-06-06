@@ -3,7 +3,7 @@
 
 #include "h5_data.h"
 #include "publisher.h"
-#include "config.h"
+#include "data_config.h"
 
 template <size_t Nchannels>
 class Server {
