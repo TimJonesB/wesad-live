@@ -1,5 +1,5 @@
-#ifndef H5SANDBOXH
-#define H5SANDBOXH
+#ifndef DATACONFIGH
+#define DATACONFIGH
 
 #include <string_view>
 
@@ -18,4 +18,4 @@ struct Config {
 constexpr Config Chest_EMG{"/signal/chest/EMG", "tcp://127.0.0.1:5000", 100, 1};
 constexpr Config Wrist_ACC{"/signal/wrist/ACC", "tcp://127.0.0.1:5001", 700, 3};
 
-#endif // H5SANDBOXH
+#endif // DATACONFIGH
