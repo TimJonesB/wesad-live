@@ -1,6 +1,5 @@
 add_executable(server 
                run_server.cpp
-               publisher.cpp
                )
 
 find_package(HDF5 REQUIRED COMPONENTS C)

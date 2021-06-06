@@ -14,7 +14,7 @@ public:
     int run();
 
 private:
-    Publisher publisher;
+    Publisher<Nchannels> publisher;
     H5Data<Nchannels> data;
     Config cfg;
 };
@@ -24,7 +24,7 @@ template <size_t Nchannels>
 Server<Nchannels>::Server(Config cfg, zmq::context_t &ctx) :
         cfg{cfg},
         publisher{ctx, std::string(cfg.port)},
-        data {H5Data<Nchannels>("../data/S2.h5")}
+        data {"../data/S2.h5"}
     {}
 
 
@@ -39,7 +39,13 @@ int Server<Nchannels>::run() {
     int status = this->data.read_chunk(std::string(cfg.path), 0, nsteps-1, data_buf);
     auto start = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < nsteps; i++) {
-        auto res = this->publisher.send(data_buf[i][0]);
+        std::cout << "Sending: " ;
+        for (int ii = 0; ii < Nchannels; ii++) {
+            std::cout << data_buf[i][ii] << " ";
+        }
+        std::cout << std::endl;
+
+        auto res = this->publisher.send(data_buf[i]);
         std::this_thread::sleep_for(std::chrono::microseconds(dt_us));
     }
     auto finish = std::chrono::high_resolution_clock::now();

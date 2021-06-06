@@ -120,7 +120,7 @@ int H5Data<Nchannels>::read_chunk(const std::string &path, const size_t a, const
     if (status < 0) {"Error!";}
 
     hsize_t n_chan = dims[1];
-    // T data_out[NX][n_chan];
+    // T data_out[NX][n_chan]
 
     hsize_t offset[2] = {a, 0};
     hsize_t count[2] = {NX_SUB, n_chan};
@@ -134,7 +134,11 @@ int H5Data<Nchannels>::read_chunk(const std::string &path, const size_t a, const
     status = H5Sselect_hyperslab(memspace, H5S_SELECT_SET, offset_out, NULL, count_out, NULL);
     if (status < 0) {"Error!";}
 
-    status = H5Dread(dataset, H5T_NATIVE_INT, memspace, dataspace, H5P_DEFAULT, buf);
+    status = H5Dread(dataset, datatype, memspace, dataspace, H5P_DEFAULT, buf);
+    for (int i = 0; i < n_chan; i++) {
+        // ::cout << data_out[5][i] << " ";
+    }
+    std::cout << std::endl;
     if (status < 0) {throw std::runtime_error("Error!");}
 
     if (debug_bool) {
@@ -144,8 +148,11 @@ int H5Data<Nchannels>::read_chunk(const std::string &path, const size_t a, const
         if (order == H5T_ORDER_LE) {
             std::cout << "Dataset has LE order" << std::endl;
         }
+        std::cout << "rank = " << rank << std::endl;
         std::cout << "nDims = " << dims[0] << std::endl;
         std::cout << "Size is " << size << std::endl;
+        std::cout << "nchan " << n_chan << std::endl;
+        std::cout << "dclass" << dclass << std::endl;
     }
     H5Sclose(dataspace);
     H5Sclose(memspace);
