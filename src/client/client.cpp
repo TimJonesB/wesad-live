@@ -1,10 +1,11 @@
 #include <zmq.hpp>
 #include <iostream>
 #include <string>
-#include "H5Cpp.h"
-#include "client.h"
 #include <thread>
 #include <chrono>
+
+#include "H5Cpp.h"
+#include "client.h"
 
 Client::Client(zmq::context_t &ctx, const std::string tcp_portsm) : subscriber {ctx, tcp_portsm} {}
 

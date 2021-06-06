@@ -1,9 +1,8 @@
 #include <zmq.hpp>
-#include <iostream>
-#include <string>
 #include <thread>
 #include <chrono>
 #include <future>
+
 #include "client.h"
 
 const std::string tcp_port0{"tcp://127.0.0.1:5000"};

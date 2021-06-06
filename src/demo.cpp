@@ -1,11 +1,11 @@
 
 #include <iostream>
-#include "h5_sandbox.h"
 #include <future>
 #include <thread>
 
+#include "config.h"
+
 int main() {
-    // run_it();
     std::future<int> f1 = std::async(std::launch::async,
                                      [](){return system("./src/server/server");});
 

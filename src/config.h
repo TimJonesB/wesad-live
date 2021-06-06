@@ -1,12 +1,7 @@
 #ifndef H5SANDBOXH
 #define H5SANDBOXH
 
-#include <map>
-#include <string>
 #include <string_view>
-#include <array>
-
-#define xxxx 4
 
 struct Config {
     std::string_view path;
