@@ -11,11 +11,11 @@
 
 int main() {
     zmq::context_t ctx;
-    // std::future<int> f0 = std::async(std::launch::async,
-    //                                  [&ctx](){return Server<Chest_EMG.Nchannels>(Chest_EMG, ctx).run();});
+    std::future<int> f0 = std::async(std::launch::async,
+                                     [&ctx](){return Server<Chest_ACC.Nchannels>(ctx, Chest_ACC).run();});
     std::future<int> f1 = std::async(std::launch::async,
-                                     [&ctx](){return Server<Wrist_ACC.Nchannels>(Wrist_ACC, ctx).run();});
-    // std::future<int> f2 = std::async(std::launch::async,
-    //                                  [&ctx](){return Server("/signal/wrist/ACC", ctx).run();});
+                                     [&ctx](){return Server<Chest_ECG.Nchannels>(ctx, Chest_ECG).run();});
+    std::future<int> f2 = std::async(std::launch::async,
+                                     [&ctx](){return Server<Wrist_BVP.Nchannels>(ctx, Wrist_BVP).run();});
     return 0;
 }

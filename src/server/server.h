@@ -9,7 +9,7 @@ template <size_t Nchannels>
 class Server {
 public:
     Server() = delete;
-    Server(Config cfg, zmq::context_t &ctx);
+    Server( zmq::context_t &ctx, Config cfg);
     ~Server() = default;
     int run();
 
@@ -21,38 +21,32 @@ private:
 
 
 template <size_t Nchannels>
-Server<Nchannels>::Server(Config cfg, zmq::context_t &ctx) :
-        cfg{cfg},
+Server<Nchannels>::Server(zmq::context_t &ctx, Config cfg) :
         publisher{ctx, std::string(cfg.port)},
+        cfg{cfg},
         data {"../data/S2.h5"}
     {}
 
-
 template <size_t Nchannels>
 int Server<Nchannels>::run() {
-    int i = 0;
     std::cout << "Running " << this->cfg.path << std::endl;
     int dt_us = int(1e6/this->cfg.fs);
-    const size_t nsteps = 1000;
-    int expected_duration = nsteps * dt_us;
     double data_buf[nsteps][Nchannels];
     int status = this->data.read_chunk(std::string(cfg.path), 0, nsteps-1, data_buf);
+    int expected_duration = nsteps * dt_us;
     auto start = std::chrono::high_resolution_clock::now();
-    for (int i = 0; i < nsteps; i++) {
-        std::cout << "Sending: " ;
-        for (int ii = 0; ii < Nchannels; ii++) {
-            std::cout << data_buf[i][ii] << " ";
-        }
-        std::cout << std::endl;
-
-        auto res = this->publisher.send(data_buf[i]);
+    std::array<double, Nchannels> arr;
+    for (size_t i = 0; i < nsteps; i++) {
+        auto res = this->publisher.send(arr);
         std::this_thread::sleep_for(std::chrono::microseconds(dt_us));
     }
-    auto finish = std::chrono::high_resolution_clock::now();
-    auto us = std::chrono::duration_cast<std::chrono::microseconds>(finish-start);
-    std::cout << this->cfg.path << " finished in " << us.count() << " us."  << std::endl;
-    std::cout << this->cfg.path << " expected duration " << expected_duration << " us."  << std::endl;
-    std::cout << ((float(us.count()) - expected_duration)/expected_duration) * 100 << " percent difference." << std::endl;
+    if (test_speed) {
+        auto finish = std::chrono::high_resolution_clock::now();
+        auto us = std::chrono::duration_cast<std::chrono::microseconds>(finish-start);
+        std::cout << this->cfg.path << " finished in " << us.count() << " us."  << std::endl;
+        std::cout << this->cfg.path << " expected duration " << expected_duration << " us."  << std::endl;
+        std::cout << ((float(us.count()) - expected_duration)/expected_duration) * 100 << " percent difference." << std::endl;
+    }
     return 0;
 }
 

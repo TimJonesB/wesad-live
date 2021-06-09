@@ -120,7 +120,6 @@ int H5Data<Nchannels>::read_chunk(const std::string &path, const size_t a, const
     if (status < 0) {"Error!";}
 
     hsize_t n_chan = dims[1];
-    // T data_out[NX][n_chan]
 
     hsize_t offset[2] = {a, 0};
     hsize_t count[2] = {NX_SUB, n_chan};

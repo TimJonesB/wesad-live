@@ -1,5 +1,4 @@
 add_executable(client
-               client.cpp
                subscriber.cpp
                run_client.cpp)
 
