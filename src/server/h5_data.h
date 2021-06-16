@@ -134,10 +134,6 @@ int H5Data<Nchannels>::read_chunk(const std::string &path, const size_t a, const
     if (status < 0) {"Error!";}
 
     status = H5Dread(dataset, datatype, memspace, dataspace, H5P_DEFAULT, buf);
-    for (int i = 0; i < n_chan; i++) {
-        // ::cout << data_out[5][i] << " ";
-    }
-    std::cout << std::endl;
     if (status < 0) {throw std::runtime_error("Error!");}
 
     if (debug_bool) {
@@ -151,7 +147,7 @@ int H5Data<Nchannels>::read_chunk(const std::string &path, const size_t a, const
         std::cout << "nDims = " << dims[0] << std::endl;
         std::cout << "Size is " << size << std::endl;
         std::cout << "nchan " << n_chan << std::endl;
-        std::cout << "dclass" << dclass << std::endl;
+        std::cout << "dclass is " << dclass << std::endl;
     }
     H5Sclose(dataspace);
     H5Sclose(memspace);
