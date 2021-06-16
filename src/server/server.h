@@ -9,7 +9,7 @@ template <size_t Nchannels>
 class Server {
 public:
     Server() = delete;
-    Server( zmq::context_t &ctx, Config cfg);
+    Server(zmq::context_t &ctx, Config cfg);
     ~Server() = default;
     int run();
 
@@ -37,6 +37,7 @@ int Server<Nchannels>::run() {
     auto start = std::chrono::high_resolution_clock::now();
     std::array<double, Nchannels> arr;
     for (size_t i = 0; i < nsteps; i++) {
+        std::copy(std::begin(data_buf[i]), std::end(data_buf[i]), arr.begin());
         auto res = this->publisher.send(arr);
         std::this_thread::sleep_for(std::chrono::microseconds(dt_us));
     }
