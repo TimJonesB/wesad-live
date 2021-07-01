@@ -1,8 +1,8 @@
-#include <zmq.hpp>
 #include <thread>
 #include <chrono>
 #include <future>
 
+#include <zmq.hpp>
 
 #include "client.h"
 #include "data_config.h"

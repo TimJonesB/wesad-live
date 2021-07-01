@@ -3,8 +3,9 @@
 
 #include <iostream>
 #include <array>
-#include <deque>
+
 #include <boost/lockfree/spsc_queue.hpp>
+
 #include "subscriber.h"
 #include "data_config.h"
 
@@ -20,9 +21,9 @@ boost::lockfree::spsc_queue<std::array<double, Wrist_BVP.Nchannels>> Wrist_BVP_q
 boost::lockfree::spsc_queue<std::array<double, Wrist_EDA.Nchannels>> Wrist_EDA_q {data_queue_sz};
 boost::lockfree::spsc_queue<std::array<double, Wrist_TEMP.Nchannels>> Wrist_TEMP_q {data_queue_sz};
 
+
 template <size_t Nchannels>
 class Client {
-
 public:
     Client() = delete;
     Client(zmq::context_t &ctx, Config cfg, boost::lockfree::spsc_queue<std::array<double, Nchannels>> &q);
@@ -35,11 +36,13 @@ private:
     std::unique_ptr<boost::lockfree::spsc_queue<std::array<double, Nchannels>>>  q;
 };
 
+
 template <size_t Nchannels>
 Client<Nchannels>::Client(zmq::context_t &ctx, Config cfg, boost::lockfree::spsc_queue<std::array<double, Nchannels>> &q ) :
         subscriber {ctx, std::string(cfg.port)},
         cfg{cfg},
         q{&q} {}
+
 
 template <size_t Nchannels>
 int Client<Nchannels>::run() {

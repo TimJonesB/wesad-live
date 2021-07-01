@@ -3,6 +3,7 @@
 
 #include <string>
 #include <cassert>
+
 #include "hdf5.h"
 
 const bool debug_bool = 1;
@@ -22,6 +23,7 @@ private:
     std::string h5fname;
 
 };
+
 
 template<size_t Nchannels>
 template<typename T>
@@ -90,6 +92,7 @@ T H5Data<Nchannels>::read_point(const std::string &path, const size_t index) {
     return data_out[0][0];
     // return H5S_NULL;
 }
+
 
 template<size_t Nchannels>
 template<typename T>

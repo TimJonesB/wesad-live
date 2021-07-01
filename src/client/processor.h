@@ -1,23 +1,22 @@
 #ifndef PROCESSORH
 #define PROCESSORH
 
-#include <deque>
 #include <vector>
 #include <map>
 #include <array>
 
-
 #include "client.h"
 #include "data_config.h"
 
-class Processor {
 
+class Processor {
 public:
     int run();
 private:
     template <size_t Nchannels>
     int proc_q(Config cfg, boost::lockfree::spsc_queue<std::array<double, Nchannels>> &q);
 };
+
 
 int Processor::run() {
     while(1) {
