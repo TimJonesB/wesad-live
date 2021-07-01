@@ -13,7 +13,6 @@
 class Processor {
 
 public:
-    int i = 1;
     int run();
 private:
     template <size_t Nchannels>
@@ -34,6 +33,7 @@ int Processor::run() {
     }
     return 0;
 }
+
 
 template <size_t Nchannels>
 int Processor::proc_q(Config cfg, boost::lockfree::spsc_queue<std::array<double, Nchannels>> &q) {
