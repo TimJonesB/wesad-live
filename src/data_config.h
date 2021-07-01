@@ -15,7 +15,7 @@ struct Config {
 constexpr size_t nsteps = 10000;
 constexpr int chest_fs = 700;
 constexpr bool test_speed = 1;
-constexpr bool debug_recv = 1;
+constexpr bool debug_recv = 0;
 constexpr int data_queue_sz = 1024;
 
 //                   NAME   |      PATH       |           PORT           |   fs   | nchan
