@@ -27,6 +27,7 @@ Server<Nchannels>::Server(zmq::context_t &ctx, Config cfg) :
         data {"../data/S2.h5"}
     {}
 
+
 template <size_t Nchannels>
 int Server<Nchannels>::run() {
     std::cout << "Running " << this->cfg.path << std::endl;

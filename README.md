@@ -1,6 +1,8 @@
 # wesad-live
-demo of "real" time wesad processing algorithms
-
+Demo of "real" time wesad processing algorithms. Biological chest/wrist sensor data stream simulated via live feed to processor from separate servers.
+https://archive.ics.uci.edu/ml/datasets/WESAD+%28Wearable+Stress+and+Affect+Detection%29
+![Optional text](./docs/flow.jpg)
 ## requirements:
-* hdf5 c-api
+* hdf5 c-api thread-safe
 * zmq cpp-api
+* boost (currently using 1.76.0)
