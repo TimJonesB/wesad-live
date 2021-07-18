@@ -3,6 +3,7 @@
 
 #include <string>
 #include <cassert>
+
 #include "hdf5.h"
 #include "data_config.h"
 
@@ -89,7 +90,7 @@ T H5Data<ConfigIndex>::read_point(const std::string &path, const size_t index) {
     H5Fclose(file);
 
     return data_out[0][0];
-    return H5S_NULL;
+    // return H5S_NULL;
 }
 
 template<size_t ConfigIndex>
