@@ -4,6 +4,7 @@
 
 #include "data_config.h"
 
+
 int main() {
     std::future<int> f1 = std::async(std::launch::async,
                                      [](){return system("./src/server/server");});

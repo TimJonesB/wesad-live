@@ -5,38 +5,36 @@
 #include "publisher.h"
 #include "data_config.h"
 
-template <size_t Nchannels>
+template <size_t ConfigIndex>
 class Server {
 public:
     Server() = delete;
-    Server(zmq::context_t &ctx, Config cfg);
+    Server(zmq::context_t &ctx);
     ~Server() = default;
     int run();
 
 private:
-    Publisher<Nchannels> publisher;
-    H5Data<Nchannels> data;
-    Config cfg;
+    Publisher<ConfigIndex> publisher;
+    H5Data<ConfigIndex> data;
 };
 
 
-template <size_t Nchannels>
-Server<Nchannels>::Server(zmq::context_t &ctx, Config cfg) :
-        publisher{ctx, std::string(cfg.port)},
-        cfg{cfg},
+template <size_t ConfigIndex>
+Server<ConfigIndex>::Server(zmq::context_t &ctx) :
+        publisher{ctx},
         data {"../data/S2.h5"}
     {}
 
+template <size_t ConfigIndex>
+int Server<ConfigIndex>::run() {
 
-template <size_t Nchannels>
-int Server<Nchannels>::run() {
-    std::cout << "Running " << this->cfg.path << std::endl;
-    int dt_us = int(1e6/this->cfg.fs);
-    double data_buf[nsteps][Nchannels];
-    int status = this->data.read_chunk(std::string(cfg.path), 0, nsteps-1, data_buf);
+    std::cout << "Running " << ConfigList[ConfigIndex].path << std::endl;
+    int dt_us = int(1e6/ConfigList[ConfigIndex].fs);
+    double data_buf[nsteps][ConfigList[ConfigIndex].Nchannels];
+    int status = this->data.read_chunk(std::string(ConfigList[ConfigIndex].path), 0, nsteps-1, data_buf);
     int expected_duration = nsteps * dt_us;
     auto start = std::chrono::high_resolution_clock::now();
-    std::array<double, Nchannels> arr;
+    std::array<double, ConfigList[ConfigIndex].Nchannels> arr;
     for (size_t i = 0; i < nsteps; i++) {
         std::copy(std::begin(data_buf[i]), std::end(data_buf[i]), arr.begin());
         auto res = this->publisher.send(arr);
@@ -45,8 +43,8 @@ int Server<Nchannels>::run() {
     if (test_speed) {
         auto finish = std::chrono::high_resolution_clock::now();
         auto us = std::chrono::duration_cast<std::chrono::microseconds>(finish-start);
-        std::cout << this->cfg.path << " finished in " << us.count() << " us."  << std::endl;
-        std::cout << this->cfg.path << " expected duration " << expected_duration << " us."  << std::endl;
+        std::cout << ConfigList[ConfigIndex].path << " finished in " << us.count() << " us."  << std::endl;
+        std::cout << ConfigList[ConfigIndex].path << " expected duration " << expected_duration << " us."  << std::endl;
         std::cout << ((float(us.count()) - expected_duration)/expected_duration) * 100 << " percent difference." << std::endl;
     }
     return 0;
