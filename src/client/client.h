@@ -5,29 +5,28 @@
 #include "subscriber.h"
 #include "data_config.h"
 
-template <size_t Nchannels>
+template <size_t ConfigIndex>
 class Client {
 
 public:
     Client() = delete;
-    Client(zmq::context_t &ctx, Config cfg);
+    Client(zmq::context_t &ctx);
     ~Client() = default;
 
     int run();
 private:
     Subscriber subscriber;
-    Config cfg;
 };
 
-template <size_t Nchannels>
-Client<Nchannels>::Client(zmq::context_t &ctx, Config cfg) :
-        subscriber {ctx, std::string(cfg.port)},
-        cfg{cfg} {}
+template <size_t ConfigIndex>
+Client<ConfigIndex>::Client(zmq::context_t &ctx) :
+        subscriber {ctx, std::string(ConfigList[ConfigIndex].port)}
+        {}
 
-template <size_t Nchannels>
-int Client<Nchannels>::run() {
+template <size_t ConfigIndex>
+int Client<ConfigIndex>::run() {
     while(1) {
-        std::array<double, Nchannels> buf;
+        std::array<double, ConfigList[ConfigIndex].Nchannels> buf;
         auto res = this->subscriber.sub.recv(zmq::buffer(buf), zmq::recv_flags::none);
     }
     return 0;

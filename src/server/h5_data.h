@@ -4,10 +4,11 @@
 #include <string>
 #include <cassert>
 #include "hdf5.h"
+#include "data_config.h"
 
 const bool debug_bool = 1;
 
-template <size_t Nchannels>
+template <size_t ConfigIndex>
 class H5Data {
 public:
     H5Data();
@@ -16,16 +17,16 @@ public:
     template<typename T>
     T read_point(const std::string &path, const size_t index);
     template<typename T>
-    int read_chunk(const std::string &path, const size_t a, const size_t b, T buf[][Nchannels]);
+    int read_chunk(const std::string &path, const size_t a, const size_t b, T buf[][ConfigList[ConfigIndex].Nchannels]);
 
 private:
     std::string h5fname;
 
 };
 
-template<size_t Nchannels>
+template<size_t ConfigIndex>
 template<typename T>
-T H5Data<Nchannels>::read_point(const std::string &path, const size_t index) {
+T H5Data<ConfigIndex>::read_point(const std::string &path, const size_t index) {
     const hsize_t NX = 1;
     const hsize_t NX_SUB = 1;
     const hsize_t RANK_OUT = 2;
@@ -88,12 +89,12 @@ T H5Data<Nchannels>::read_point(const std::string &path, const size_t index) {
     H5Fclose(file);
 
     return data_out[0][0];
-    // return H5S_NULL;
+    return H5S_NULL;
 }
 
-template<size_t Nchannels>
+template<size_t ConfigIndex>
 template<typename T>
-int H5Data<Nchannels>::read_chunk(const std::string &path, const size_t a, const size_t b, T buf[][Nchannels]) {
+int H5Data<ConfigIndex>::read_chunk(const std::string &path, const size_t a, const size_t b, T buf[][ConfigList[ConfigIndex].Nchannels]) {
     if (b-a < 0) {
         throw std::runtime_error("Size of chunk[a:b] must be greater than or equal to zero.");
     }

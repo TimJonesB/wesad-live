@@ -5,32 +5,34 @@
 #include "publisher.h"
 #include "data_config.h"
 
-template <size_t Nchannels>
+template <size_t ConfigIndex>
 class Server {
 public:
     Server() = delete;
-    Server(zmq::context_t &ctx, Config cfg);
+    Server(zmq::context_t &ctx);
     ~Server() = default;
     int run();
 
 private:
-    Publisher<Nchannels> publisher;
-    H5Data<Nchannels> data;
-    Config cfg;
+    Publisher<ConfigIndex> publisher;
+    H5Data<ConfigIndex> data;
 };
 
 
-template <size_t Nchannels>
-Server<Nchannels>::Server(zmq::context_t &ctx, Config cfg) :
-        publisher{ctx, std::string(cfg.port)},
-        cfg{cfg},
+template <size_t ConfigIndex>
+Server<ConfigIndex>::Server(zmq::context_t &ctx) :
+        publisher{ctx},
         data {"../data/S2.h5"}
     {}
 
-template <size_t Nchannels>
-int Server<Nchannels>::run() {
-    std::cout << "Running " << this->cfg.path << std::endl;
-    int dt_us = int(1e6/this->cfg.fs);
+template <size_t ConfigIndex>
+int Server<ConfigIndex>::run() {
+
+    constexpr size_t Nchannels = ConfigList[ConfigIndex].Nchannels;
+    constexpr Config cfg = ConfigList[ConfigIndex];
+
+    std::cout << "Running " << cfg.path << std::endl;
+    int dt_us = int(1e6/cfg.fs);
     double data_buf[nsteps][Nchannels];
     int status = this->data.read_chunk(std::string(cfg.path), 0, nsteps-1, data_buf);
     int expected_duration = nsteps * dt_us;
@@ -44,8 +46,8 @@ int Server<Nchannels>::run() {
     if (test_speed) {
         auto finish = std::chrono::high_resolution_clock::now();
         auto us = std::chrono::duration_cast<std::chrono::microseconds>(finish-start);
-        std::cout << this->cfg.path << " finished in " << us.count() << " us."  << std::endl;
-        std::cout << this->cfg.path << " expected duration " << expected_duration << " us."  << std::endl;
+        std::cout << cfg.path << " finished in " << us.count() << " us."  << std::endl;
+        std::cout << cfg.path << " expected duration " << expected_duration << " us."  << std::endl;
         std::cout << ((float(us.count()) - expected_duration)/expected_duration) * 100 << " percent difference." << std::endl;
     }
     return 0;
