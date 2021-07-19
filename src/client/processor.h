@@ -14,29 +14,34 @@ public:
     int run();
 private:
     template <size_t ConfigIndex>
-    int proc_q(boost::lockfree::spsc_queue<std::array<double, ConfigList[ConfigIndex].Nchannels>> &q);
+    int proc_q();
+    template <size_t CurrentIndex>
+    int proc_all_q();
 };
 
 
 int Processor::run() {
     while(1) {
-        proc_q<0>(q0);
-        proc_q<1>(q1);
-        proc_q<2>(q2);
-        proc_q<3>(q3);
-        proc_q<4>(q4);
-        proc_q<5>(q5);
-        proc_q<6>(q6);
-        proc_q<7>(q7);
-        proc_q<8>(q8);
-        proc_q<9>(q9);
+        proc_all_q<std::size(ConfigList)-1>();
     }
     return 0;
 }
 
 
+template<size_t CurrentIndex>
+int Processor::proc_all_q(){
+    proc_q<CurrentIndex>();
+    if constexpr (CurrentIndex) {
+        return proc_all_q<CurrentIndex-1>();
+    }
+    else {
+        return 0;
+    }
+}
+
 template <size_t ConfigIndex>
-int Processor::proc_q(boost::lockfree::spsc_queue<std::array<double, ConfigList[ConfigIndex].Nchannels>> &q) {
+int Processor::proc_q() {
+    QueueManager<ConfigIndex> q;
     if (!q.empty()) {
         std::array<double, ConfigList[ConfigIndex].Nchannels> arr;
         q.pop(arr);
