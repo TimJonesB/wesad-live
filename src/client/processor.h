@@ -20,7 +20,7 @@ private:
 };
 
 
-int Processor::run() {
+inline int Processor::run() {
     while(1) {
         proc_all_q<std::size(ConfigList)-1>();
     }
@@ -29,7 +29,7 @@ int Processor::run() {
 
 
 template<size_t CurrentIndex>
-int Processor::proc_all_q(){
+inline int Processor::proc_all_q(){
     proc_q<CurrentIndex>();
     if constexpr (CurrentIndex) {
         return proc_all_q<CurrentIndex-1>();
@@ -40,8 +40,8 @@ int Processor::proc_all_q(){
 }
 
 template <size_t ConfigIndex>
-int Processor::proc_q() {
-    QueueManager<ConfigIndex> q;
+inline int Processor::proc_q() {
+    QueueMgr<ConfigIndex> q;
     if (!q.empty()) {
         std::array<double, ConfigList[ConfigIndex].Nchannels> arr;
         q.pop(arr);

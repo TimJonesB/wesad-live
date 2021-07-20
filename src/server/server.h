@@ -20,13 +20,13 @@ private:
 
 
 template <size_t ConfigIndex>
-Server<ConfigIndex>::Server(zmq::context_t &ctx) :
+inline Server<ConfigIndex>::Server(zmq::context_t &ctx) :
         publisher{ctx},
         data {"../data/S2.h5"}
     {}
 
 template <size_t ConfigIndex>
-int Server<ConfigIndex>::run() {
+inline int Server<ConfigIndex>::run() {
 
     std::cout << "Running " << ConfigList[ConfigIndex].path << std::endl;
     int dt_us = int(1e6/ConfigList[ConfigIndex].fs);

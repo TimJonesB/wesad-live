@@ -27,7 +27,7 @@ private:
 
 template<size_t ConfigIndex>
 template<typename T>
-T H5Data<ConfigIndex>::read_point(const std::string &path, const size_t index) {
+inline T H5Data<ConfigIndex>::read_point(const std::string &path, const size_t index) {
     const hsize_t NX = 1;
     const hsize_t NX_SUB = 1;
     const hsize_t RANK_OUT = 2;
@@ -95,7 +95,7 @@ T H5Data<ConfigIndex>::read_point(const std::string &path, const size_t index) {
 
 template<size_t ConfigIndex>
 template<typename T>
-int H5Data<ConfigIndex>::read_chunk(const std::string &path, const size_t a, const size_t b, T buf[][ConfigList[ConfigIndex].Nchannels]) {
+inline int H5Data<ConfigIndex>::read_chunk(const std::string &path, const size_t a, const size_t b, T buf[][ConfigList[ConfigIndex].Nchannels]) {
     if (b-a < 0) {
         throw std::runtime_error("Size of chunk[a:b] must be greater than or equal to zero.");
     }
