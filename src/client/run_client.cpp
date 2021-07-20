@@ -8,6 +8,7 @@
 #include "data_config.h"
 #include "processor.h"
 
+
 template <size_t index>
 void launch_clients(std::vector<std::future<int>> &v, zmq::context_t &ctx) {
     if constexpr(index-1){
@@ -17,6 +18,7 @@ void launch_clients(std::vector<std::future<int>> &v, zmq::context_t &ctx) {
     else
         return;
 }
+
 
 int main() {
     zmq::context_t ctx;
