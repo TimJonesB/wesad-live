@@ -8,18 +8,19 @@
 #include "server.h"
 #include "data_config.h"
 
+template <size_t index>
+void launch_servers(std::vector<std::future<int>> &v, zmq::context_t &ctx) {
+    if constexpr(index-1){
+        v.push_back(std::async(std::launch::async, [&ctx](){return Server<index-1>(ctx).run();}));
+        launch_servers<index-1>(v, ctx);
+    }
+    else
+        return;
+}
 
 int main() {
     zmq::context_t ctx;
-    std::future<int> f0 = std::async(std::launch::async, [&ctx](){return Server<0>(ctx).run();});
-    std::future<int> f1 = std::async(std::launch::async, [&ctx](){return Server<1>(ctx).run();});
-    std::future<int> f2 = std::async(std::launch::async, [&ctx](){return Server<2>(ctx).run();});
-    std::future<int> f3 = std::async(std::launch::async, [&ctx](){return Server<3>(ctx).run();});
-    // std::future<int> f4 = std::async(std::launch::async, [&ctx](){return Server<4>(ctx).run();});
-    std::future<int> f5 = std::async(std::launch::async, [&ctx](){return Server<5>(ctx).run();});
-    std::future<int> f6 = std::async(std::launch::async, [&ctx](){return Server<6>(ctx).run();});
-    std::future<int> f7 = std::async(std::launch::async, [&ctx](){return Server<7>(ctx).run();});
-    std::future<int> f8 = std::async(std::launch::async, [&ctx](){return Server<8>(ctx).run();});
-    std::future<int> f9 = std::async(std::launch::async, [&ctx](){return Server<9>(ctx).run();});
+    std::vector<std::future<int>> v;
+    launch_servers<std::size(ConfigList)>(v, ctx);
     return 0;
 }
