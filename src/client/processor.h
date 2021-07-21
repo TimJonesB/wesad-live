@@ -1,3 +1,4 @@
+/** @file */
 #ifndef PROCESSORH
 #define PROCESSORH
 
@@ -8,7 +9,12 @@
 #include "client.h"
 #include "data_config.h"
 
-
+/** 
+ * @brief Continously loops through DataQueue's and processes data.
+ * @tparam ConfigIndex Index of the data stream in ConfigList.
+ * 
+ * Continously inspects all DataQueues, pop's data off if available, and processes according to algorithms being used. 
+ */
 class Processor {
 public:
     int run();
@@ -20,6 +26,12 @@ private:
 };
 
 
+/** 
+ * @brief Continously calls proc_all_q.
+ * 
+ * Continously calls proc_all_q which loops through DataQueue's and processes data.
+ * @returns Runs indefinitely
+ */
 inline int Processor::run() {
     while(1) {
         proc_all_q<std::size(ConfigList)-1>();
@@ -28,6 +40,13 @@ inline int Processor::run() {
 }
 
 
+/** 
+ * @brief TMP method recursively calls proc_q<CurrentIndex>, proc_q<CurrentIndex-1>.
+ * @tparam CurrentIndex Index of the DataQueue in ClientQueues::.
+ * 
+ * TMP method recursively calls proc_q<CurrentIndex>, proc_q<CurrentIndex-1> size(ConfigList) times.
+ * @returns 0
+ */
 template<size_t CurrentIndex>
 inline int Processor::proc_all_q(){
     proc_q<CurrentIndex>();
@@ -39,6 +58,14 @@ inline int Processor::proc_all_q(){
     }
 }
 
+
+/** 
+ * @brief Processes DataQueue at ConfigIndex
+ * @tparam ConfigIndex Index of the data stream in ConfigList.
+ * 
+ * Processes DataQueue at ConfigIndex by popping data from Queue and providing to processor.
+ * @returns 0
+ */
 template <size_t ConfigIndex>
 inline int Processor::proc_q() {
     QueueMgr<ConfigIndex> q;

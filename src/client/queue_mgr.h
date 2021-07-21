@@ -1,9 +1,21 @@
+/** @file */
 #ifndef QUEUEMGRH
 #define QUEUEMGRH
 
+/** 
+ * @brief Alias for single producer (Client) and single consumer (processor) queue of arrays of data.
+ *
+ * @tparam ConfigIndex Index of the data stream in ConfigList.
+ * Alias for thread safe lock free single producer single consumer queue of std::arrays of size ConfigList[ConfigIndex].Nchannels.
+ */
 template<size_t ConfigIndex>
 using DataQueue = boost::lockfree::spsc_queue<std::array<double, ConfigList[ConfigIndex].Nchannels>>;
 
+
+/** 
+ * @brief Namespace to hold global DataQueues 
+ * Namespace to hold global DataQueue<DataIndex> objects corresponding to each data stream Client.
+ */
 namespace ClientQueues{
     DataQueue<0> q0 {data_queue_sz};
     DataQueue<1> q1 {data_queue_sz};
@@ -18,6 +30,12 @@ namespace ClientQueues{
 }
 
 
+/** 
+ * @brief Manages global DataQueue collection from ClientQueues.
+ *
+ * @tparam ConfigIndex Index of the data stream in ConfigList.
+ * Manages global DataQueue collection by associating DataQueue with its corresponding ConfigIndex and managing the queue's basic operations.
+ */
 template <size_t ConfigIndex>
 class QueueMgr {
 public:
@@ -32,6 +50,12 @@ private:
 };
 
 
+/** 
+ * @brief Manages global DataQueue collection from ClientQueues.
+ *
+ * @tparam ConfigIndex Index of the data stream in ConfigList.
+ * Manages global DataQueue collection by associating DataQueue with its corresponding ConfigIndex and managing the queue's basic operations.
+ */
 template <size_t ConfigIndex>
 inline QueueMgr<ConfigIndex>::QueueMgr(){
 	if constexpr(ConfigIndex == 0)
@@ -56,23 +80,38 @@ inline QueueMgr<ConfigIndex>::QueueMgr(){
 		q = &ClientQueues::q9;
 }
 
+/** 
+ * @brief Calls DataQueue ptr's empty method.
+ *
+ * @tparam ConfigIndex Index of the data stream in ConfigList.
+ * @returns True if empty
+ */
 template <size_t ConfigIndex>
 inline bool QueueMgr<ConfigIndex>::empty() {
 	return q->empty();
 }
 
 
+/** 
+ * @brief Calls DataQueue ptr's push method.
+ * @param arr data array to go into DataQueue.
+ * @tparam ConfigIndex Index of the data stream in ConfigList.
+ * @returns True if successful
+ */
 template <size_t ConfigIndex>
 inline bool QueueMgr<ConfigIndex>::push(std::array<double, ConfigList[ConfigIndex].Nchannels> arr) {
-	q->push(arr);
-	return true;
+	return q->push(arr);
 }
 
 
+/** 
+ * @brief Calls DataQueue ptr's pop(std::array) form of method.
+ * @param arr data array reference to copy into.
+ * @returns True if successful
+ */
 template <size_t ConfigIndex>
 inline bool QueueMgr<ConfigIndex>::pop(std::array<double, ConfigList[ConfigIndex].Nchannels> &arr) {
-	q->pop(arr);
-	return true;
+	return q->pop(arr);
 }
 
 #endif //QUEUEMGRH

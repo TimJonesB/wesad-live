@@ -1,3 +1,4 @@
+/** @file */
 #ifndef SERVERH
 #define SERVERH
 
@@ -5,6 +6,13 @@
 #include "publisher.h"
 #include "data_config.h"
 
+/** 
+ * @brief Reads data from HDF5 file and send to TCP port via ZMQ connection.
+ * @tparam ConfigIndex Index of the data stream in ConfigList.
+ * @todo Factor out and clean up data transmission timing tests in run method
+ * 
+ * Server reads a large buffer of data from HDF5 file up front, and transmitts data at a rate according to ConfigList[ConfigIndex].fs . 
+ */
 template <size_t ConfigIndex>
 class Server {
 public:
@@ -19,12 +27,21 @@ private:
 };
 
 
+/** 
+ * @brief Server constructor.
+ * @tparam ConfigIndex Index of the data stream in ConfigList.
+ */
 template <size_t ConfigIndex>
 inline Server<ConfigIndex>::Server(zmq::context_t &ctx) :
         publisher{ctx},
         data {"../data/S2.h5"}
     {}
 
+/** 
+ * @brief  Continuously reads data from HDF5 file and sends data via Publisher.
+ * @tparam ConfigIndex Index of the data stream in ConfigList.
+ * @returns Runs indefinitely.
+ */
 template <size_t ConfigIndex>
 inline int Server<ConfigIndex>::run() {
 

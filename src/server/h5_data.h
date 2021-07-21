@@ -1,3 +1,4 @@
+/** @file */
 #ifndef H5DATAH
 #define H5DATAH
 
@@ -9,6 +10,10 @@
 
 const bool debug_bool = 1;
 
+/** 
+ * @brief Manages read operations from HDF5 data source file.
+ * @todo Clean this class up and impl error handling
+ */
 template <size_t ConfigIndex>
 class H5Data {
 public:
@@ -25,6 +30,14 @@ private:
 
 };
 
+/**
+ * @brief reads single data point from HDF5 file
+ * @tparam ConfigIndex Index of the data stream in ConfigList.
+ * @tparam T Generic type.
+ * @param path Path within hdf5 file to go to, relative to HDF5 file root.
+ * @param index Index of data point to extract.
+ * @returns Std::Array<T, ConfigList[ConfigIndex].Nchannels> data point
+ */
 template<size_t ConfigIndex>
 template<typename T>
 inline T H5Data<ConfigIndex>::read_point(const std::string &path, const size_t index) {
@@ -93,6 +106,17 @@ inline T H5Data<ConfigIndex>::read_point(const std::string &path, const size_t i
     // return H5S_NULL;
 }
 
+
+/**
+ * @brief reads chunk (range) of data from HDF5 file
+ * @tparam ConfigIndex Index of the data stream in ConfigList.
+ * @tparam T Generic type.
+ * @param path Path within hdf5 file to go to, relative to HDF5 file root.
+ * @param a Start index of data chunk to extract.
+ * @param b End index of data chunk to extract.
+ * @param buf Buffer to copy data into.
+ * @returns H5S_NULL if operation successful
+ */
 template<size_t ConfigIndex>
 template<typename T>
 inline int H5Data<ConfigIndex>::read_chunk(const std::string &path, const size_t a, const size_t b, T buf[][ConfigList[ConfigIndex].Nchannels]) {
