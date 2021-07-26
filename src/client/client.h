@@ -1,3 +1,4 @@
+/** @file */
 #ifndef CLIENTH
 #define CLIENTH
 
@@ -10,6 +11,13 @@
 #include "data_config.h"
 #include "queue_mgr.h"
 
+/** 
+ * @brief Receives data via tcp and pushes to processor queues.
+ * @tparam ConfigIndex Index of the data stream in ConfigList.
+ * 
+ * Client receives data accross tcp via Subscriber, and pushes data to its corresponding DataQueue to be processed by Processor. 
+ */
+
 template <size_t ConfigIndex>
 class Client {
 public:
@@ -19,18 +27,27 @@ public:
 
     int run();
 private:
-    Subscriber subscriber;
+    Subscriber<ConfigIndex> subscriber;
     QueueMgr<ConfigIndex>  q;
 
 };
 
-
+/** 
+ * @brief Client constructor.
+ * @tparam ConfigIndex Index of the data stream in ConfigList.
+ */
 template <size_t ConfigIndex>
 inline Client<ConfigIndex>::Client(zmq::context_t &ctx) :
-        subscriber {ctx, std::string(ConfigList[ConfigIndex].port)}
+        subscriber {ctx}
         {}
 
 
+/** 
+ * @brief  Continuously receives data via Subscriber and pushes to DataQueue to be processed by Processor.
+ * @tparam ConfigIndex Index of the data stream in ConfigList.
+ * @todo factor out recv functionality to subscriber class
+ * @returns Runs indefinitely
+ */
 template <size_t ConfigIndex>
 inline int Client<ConfigIndex>::run() {
     while(1) {

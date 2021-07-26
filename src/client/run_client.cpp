@@ -1,3 +1,4 @@
+/** @file */
 #include <thread>
 #include <chrono>
 #include <future>
@@ -9,17 +10,29 @@
 #include "processor.h"
 
 
-template <size_t index>
-void launch_clients(std::vector<std::future<int>> &v, zmq::context_t &ctx) {
-    if constexpr(index-1){
-        v.push_back(std::async(std::launch::async, [&ctx](){return Client<index-1>(ctx).run();}));
-        launch_clients<index-1>(v, ctx);
+/** 
+ * @brief TMP method to launch Client<0> through Client<size(ConfigList)-1>
+ * @param v Vector of futures to save off to.
+ * @param ctx ZMQ socket context.
+ * @tparam CurrentIndex Index of the client being launched. 
+ * @returns 0
+ */
+template <size_t CurrentIndex>
+int launch_clients(std::vector<std::future<int>> &v, zmq::context_t &ctx) {
+    if constexpr(CurrentIndex-1){
+        v.push_back(std::async(std::launch::async, [&ctx](){return Client<CurrentIndex-1>(ctx).run();}));
+        return launch_clients<CurrentIndex-1>(v, ctx);
     }
-    else
-        return;
+    else {
+        return 0;
+    }
 }
 
 
+/** 
+ * @brief Entry point for the client application. 
+ * @returns 0
+ */
 int main() {
     zmq::context_t ctx;
     std::vector<std::future<int>> v;

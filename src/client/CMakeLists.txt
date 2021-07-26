@@ -1,6 +1,5 @@
 FILE(GLOB alglib ${CMAKE_CURRENT_SOURCE_DIR}/../../alglib_3_17_0_cpp/src/*.cpp)
 add_executable(client
-               subscriber.cpp
                run_client.cpp
                ${alglib}
                )
