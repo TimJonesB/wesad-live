@@ -17,8 +17,10 @@
  */
 template <size_t CurrentIndex>
 int launch_servers(std::vector<std::future<int>> &v, zmq::context_t &ctx) {
-    if constexpr(CurrentIndex-1){
-        v.push_back(std::async(std::launch::async, [&ctx](){return Server<CurrentIndex-1>(ctx).run();}));
+    if constexpr(CurrentIndex){
+        if constexpr(ConfigList[CurrentIndex-1].status == Cfg::ACTIVE) {
+            v.push_back(std::async(std::launch::async, [&ctx](){return Server<CurrentIndex-1>(ctx).run();}));
+        }
         return launch_servers<CurrentIndex-1>(v, ctx);
     }
     else

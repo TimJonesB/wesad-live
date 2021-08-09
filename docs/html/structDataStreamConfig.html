@@ -78,10 +78,9 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a04243a781530acd5781d5137cd02e518"><td class="memItemLeft" align="right" valign="top"><a id="a04243a781530acd5781d5137cd02e518" name="a04243a781530acd5781d5137cd02e518"></a>
-constexpr&#160;</td><td class="memItemRight" valign="bottom"><b>DataStreamConfig</b> (const std::string_view path, const std::string_view <a class="el" href="structDataStreamConfig.html#a9430669e63459af735ebb560d3a50548">port</a>, const int <a class="el" href="structDataStreamConfig.html#adedc28ec986c5b87a0cd4b34606c9181">fs</a>, const size_t <a class="el" href="structDataStreamConfig.html#a9b701ef2e6e05a18ac5e8e3803cbe16a">Nchannels</a>)</td></tr>
-<tr class="memdesc:a04243a781530acd5781d5137cd02e518"><td class="mdescLeft">&#160;</td><td class="mdescRight">number of channels per data transmission (ie 3 for acceleration x,y,z, 1 for ECG signal) <br /></td></tr>
-<tr class="separator:a04243a781530acd5781d5137cd02e518"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a266449a80b8c1b9918c90de2ecedd389"><td class="memItemLeft" align="right" valign="top"><a id="a266449a80b8c1b9918c90de2ecedd389" name="a266449a80b8c1b9918c90de2ecedd389"></a>
+constexpr&#160;</td><td class="memItemRight" valign="bottom"><b>DataStreamConfig</b> (const std::string_view path, const std::string_view <a class="el" href="structDataStreamConfig.html#a9430669e63459af735ebb560d3a50548">port</a>, const size_t <a class="el" href="structDataStreamConfig.html#a2f5d00ffb0fc11acb607c8b5361b8870">fs</a>, const size_t <a class="el" href="structDataStreamConfig.html#a9b701ef2e6e05a18ac5e8e3803cbe16a">Nchannels</a>, <a class="el" href="data__config_8h.html#a3e0600422c6d82a16e50b552312f9fb7">Cfg</a> <a class="el" href="structDataStreamConfig.html#a626be43291428ea863f39cdeee11f458">status</a>)</td></tr>
+<tr class="separator:a266449a80b8c1b9918c90de2ecedd389"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -92,14 +91,18 @@ std::string_view&#160;</td><td class="memItemRight" valign="bottom"><b>path</b><
 std::string_view&#160;</td><td class="memItemRight" valign="bottom"><b>port</b></td></tr>
 <tr class="memdesc:a9430669e63459af735ebb560d3a50548"><td class="mdescLeft">&#160;</td><td class="mdescRight">path from root of HDF5 data source file to data stream data <br /></td></tr>
 <tr class="separator:a9430669e63459af735ebb560d3a50548"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adedc28ec986c5b87a0cd4b34606c9181"><td class="memItemLeft" align="right" valign="top"><a id="adedc28ec986c5b87a0cd4b34606c9181" name="adedc28ec986c5b87a0cd4b34606c9181"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>fs</b></td></tr>
-<tr class="memdesc:adedc28ec986c5b87a0cd4b34606c9181"><td class="mdescLeft">&#160;</td><td class="mdescRight">tcp port to send/read data from for data stream <br /></td></tr>
-<tr class="separator:adedc28ec986c5b87a0cd4b34606c9181"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f5d00ffb0fc11acb607c8b5361b8870"><td class="memItemLeft" align="right" valign="top"><a id="a2f5d00ffb0fc11acb607c8b5361b8870" name="a2f5d00ffb0fc11acb607c8b5361b8870"></a>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><b>fs</b></td></tr>
+<tr class="memdesc:a2f5d00ffb0fc11acb607c8b5361b8870"><td class="mdescLeft">&#160;</td><td class="mdescRight">tcp port to send/read data from for data stream <br /></td></tr>
+<tr class="separator:a2f5d00ffb0fc11acb607c8b5361b8870"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b701ef2e6e05a18ac5e8e3803cbe16a"><td class="memItemLeft" align="right" valign="top"><a id="a9b701ef2e6e05a18ac5e8e3803cbe16a" name="a9b701ef2e6e05a18ac5e8e3803cbe16a"></a>
 size_t&#160;</td><td class="memItemRight" valign="bottom"><b>Nchannels</b></td></tr>
 <tr class="memdesc:a9b701ef2e6e05a18ac5e8e3803cbe16a"><td class="mdescLeft">&#160;</td><td class="mdescRight">frequency to transmit data over (sampling frequency) <br /></td></tr>
 <tr class="separator:a9b701ef2e6e05a18ac5e8e3803cbe16a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a626be43291428ea863f39cdeee11f458"><td class="memItemLeft" align="right" valign="top"><a id="a626be43291428ea863f39cdeee11f458" name="a626be43291428ea863f39cdeee11f458"></a>
+<a class="el" href="data__config_8h.html#a3e0600422c6d82a16e50b552312f9fb7">Cfg</a>&#160;</td><td class="memItemRight" valign="bottom"><b>status</b></td></tr>
+<tr class="memdesc:a626be43291428ea863f39cdeee11f458"><td class="mdescLeft">&#160;</td><td class="mdescRight">number of channels per data transmission (ie 3 for acceleration x,y,z, 1 for ECG signal) <br /></td></tr>
+<tr class="separator:a626be43291428ea863f39cdeee11f458"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Holds configuration for a single data stream/data source. </p>

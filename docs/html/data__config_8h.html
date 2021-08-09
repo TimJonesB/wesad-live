@@ -69,6 +69,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#enum-members">Enumerations</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle"><div class="title">data_config.h File Reference</div></div>
 </div><!--header-->
@@ -83,29 +84,37 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Holds configuration for a single data stream/data source.  <a href="structDataStreamConfig.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:a3e0600422c6d82a16e50b552312f9fb7"><td class="memItemLeft" align="right" valign="top"><a id="a3e0600422c6d82a16e50b552312f9fb7" name="a3e0600422c6d82a16e50b552312f9fb7"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data__config_8h.html#a3e0600422c6d82a16e50b552312f9fb7">Cfg</a> { <b>DISABLED</b> = 0
+, <b>ACTIVE</b> = 1
+ }</td></tr>
+<tr class="memdesc:a3e0600422c6d82a16e50b552312f9fb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">On/Off for each item in ConfigList. <br /></td></tr>
+<tr class="separator:a3e0600422c6d82a16e50b552312f9fb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a9642dd80d1d50cd586b9e1f5d1612f1f"><td class="memItemLeft" align="right" valign="top"><a id="a9642dd80d1d50cd586b9e1f5d1612f1f" name="a9642dd80d1d50cd586b9e1f5d1612f1f"></a>
 constexpr size_t&#160;</td><td class="memItemRight" valign="bottom"><b>nsteps</b> = 10000</td></tr>
 <tr class="separator:a9642dd80d1d50cd586b9e1f5d1612f1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc83a68f8b80578f6ec69a13a81e806b"><td class="memItemLeft" align="right" valign="top"><a id="afc83a68f8b80578f6ec69a13a81e806b" name="afc83a68f8b80578f6ec69a13a81e806b"></a>
-constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>chest_fs</b> = 700</td></tr>
-<tr class="memdesc:afc83a68f8b80578f6ec69a13a81e806b"><td class="mdescLeft">&#160;</td><td class="mdescRight">N steps of data to send per channel for simulation; Also determines data chunk pre-read buffer size. <br /></td></tr>
-<tr class="separator:afc83a68f8b80578f6ec69a13a81e806b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87ef849bf041362d2131b5e7efd6a428"><td class="memItemLeft" align="right" valign="top"><a id="a87ef849bf041362d2131b5e7efd6a428" name="a87ef849bf041362d2131b5e7efd6a428"></a>
+constexpr size_t&#160;</td><td class="memItemRight" valign="bottom"><b>chest_fs</b> = 700</td></tr>
+<tr class="memdesc:a87ef849bf041362d2131b5e7efd6a428"><td class="mdescLeft">&#160;</td><td class="mdescRight">N steps of data to send per channel for simulation; Also determines data chunk pre-read buffer size. <br /></td></tr>
+<tr class="separator:a87ef849bf041362d2131b5e7efd6a428"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40905f4cd8607a788f9352bb42d0caa1"><td class="memItemLeft" align="right" valign="top"><a id="a40905f4cd8607a788f9352bb42d0caa1" name="a40905f4cd8607a788f9352bb42d0caa1"></a>
+constexpr size_t&#160;</td><td class="memItemRight" valign="bottom"><b>data_queue_sz</b> = 1024</td></tr>
+<tr class="memdesc:a40905f4cd8607a788f9352bb42d0caa1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reference param for chest data sampling frequency. <br /></td></tr>
+<tr class="separator:a40905f4cd8607a788f9352bb42d0caa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9a7899ae82b33f9d11f7370e69f3ed3"><td class="memItemLeft" align="right" valign="top"><a id="af9a7899ae82b33f9d11f7370e69f3ed3" name="af9a7899ae82b33f9d11f7370e69f3ed3"></a>
-constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><b>test_speed</b> = 1</td></tr>
-<tr class="memdesc:af9a7899ae82b33f9d11f7370e69f3ed3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reference param for chest data sampling frequency. <br /></td></tr>
+constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><b>test_speed</b> = 0</td></tr>
+<tr class="memdesc:af9a7899ae82b33f9d11f7370e69f3ed3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of data queue. <br /></td></tr>
 <tr class="separator:af9a7899ae82b33f9d11f7370e69f3ed3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c38e913d259820ff52179d0f2402e68"><td class="memItemLeft" align="right" valign="top"><a id="a9c38e913d259820ff52179d0f2402e68" name="a9c38e913d259820ff52179d0f2402e68"></a>
 constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><b>debug_recv</b> = 0</td></tr>
 <tr class="memdesc:a9c38e913d259820ff52179d0f2402e68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Triggers a data transmission speed test. <br /></td></tr>
 <tr class="separator:a9c38e913d259820ff52179d0f2402e68"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac36df915be6619af9f7f909b4a50a56b"><td class="memItemLeft" align="right" valign="top"><a id="ac36df915be6619af9f7f909b4a50a56b" name="ac36df915be6619af9f7f909b4a50a56b"></a>
-constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>data_queue_sz</b> = 1024</td></tr>
-<tr class="memdesc:ac36df915be6619af9f7f909b4a50a56b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Debugs recv data in <a class="el" href="classServer.html" title="Reads data from HDF5 file and send to TCP port via ZMQ connection.">Server</a> application. <br /></td></tr>
-<tr class="separator:ac36df915be6619af9f7f909b4a50a56b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9aa684a842dc21c7eb58bb74fae861d4"><td class="memItemLeft" align="right" valign="top">constexpr std::array&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data__config_8h.html#a9aa684a842dc21c7eb58bb74fae861d4">ConfigList</a></td></tr>
-<tr class="memdesc:a9aa684a842dc21c7eb58bb74fae861d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of data queue.  <a href="data__config_8h.html#a9aa684a842dc21c7eb58bb74fae861d4">More...</a><br /></td></tr>
+<tr class="memdesc:a9aa684a842dc21c7eb58bb74fae861d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Debugs recv data in <a class="el" href="classServer.html" title="Reads data from HDF5 file and send to TCP port via ZMQ connection.">Server</a> application.  <a href="data__config_8h.html#a9aa684a842dc21c7eb58bb74fae861d4">More...</a><br /></td></tr>
 <tr class="separator:a9aa684a842dc21c7eb58bb74fae861d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Variable Documentation</h2>
@@ -128,23 +137,23 @@ constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>data_queue_s
   </tr>
 </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">{<a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/chest/ACC&quot;</span>,  <span class="stringliteral">&quot;tcp://127.0.0.1:5000&quot;</span>, <a class="code" href="data__config_8h.html#afc83a68f8b80578f6ec69a13a81e806b">chest_fs</a>, 3},</div>
-<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/chest/ECG&quot;</span>,  <span class="stringliteral">&quot;tcp://127.0.0.1:5001&quot;</span>, <a class="code" href="data__config_8h.html#afc83a68f8b80578f6ec69a13a81e806b">chest_fs</a>, 1},</div>
-<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/chest/EMG&quot;</span>,  <span class="stringliteral">&quot;tcp://127.0.0.1:5002&quot;</span>, <a class="code" href="data__config_8h.html#afc83a68f8b80578f6ec69a13a81e806b">chest_fs</a>, 1},</div>
-<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/chest/EDA&quot;</span>,  <span class="stringliteral">&quot;tcp://127.0.0.1:5003&quot;</span>, <a class="code" href="data__config_8h.html#afc83a68f8b80578f6ec69a13a81e806b">chest_fs</a>, 1},</div>
-<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/chest/Temp&quot;</span>, <span class="stringliteral">&quot;tcp://127.0.0.1:5004&quot;</span>, <a class="code" href="data__config_8h.html#afc83a68f8b80578f6ec69a13a81e806b">chest_fs</a>, 1}, </div>
-<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/chest/Resp&quot;</span>, <span class="stringliteral">&quot;tcp://127.0.0.1:5005&quot;</span>, <a class="code" href="data__config_8h.html#afc83a68f8b80578f6ec69a13a81e806b">chest_fs</a>, 1},</div>
-<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/wrist/ACC&quot;</span>,  <span class="stringliteral">&quot;tcp://127.0.0.1:5006&quot;</span>, 32,       3},</div>
-<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/wrist/BVP&quot;</span>,  <span class="stringliteral">&quot;tcp://127.0.0.1:5007&quot;</span>, 64,       1},</div>
-<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/wrist/EDA&quot;</span>,  <span class="stringliteral">&quot;tcp://127.0.0.1:5008&quot;</span>, 4,        1},</div>
-<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/wrist/TEMP&quot;</span>, <span class="stringliteral">&quot;tcp://127.0.0.1:5009&quot;</span>, 4,        1}}</div>
-<div class="ttc" id="adata__config_8h_html_afc83a68f8b80578f6ec69a13a81e806b"><div class="ttname"><a href="data__config_8h.html#afc83a68f8b80578f6ec69a13a81e806b">chest_fs</a></div><div class="ttdeci">constexpr int chest_fs</div><div class="ttdoc">N steps of data to send per channel for simulation; Also determines data chunk pre-read buffer size.</div><div class="ttdef"><b>Definition:</b> data_config.h:21</div></div>
-<div class="ttc" id="astructDataStreamConfig_html"><div class="ttname"><a href="structDataStreamConfig.html">DataStreamConfig</a></div><div class="ttdoc">Holds configuration for a single data stream/data source.</div><div class="ttdef"><b>Definition:</b> data_config.h:10</div></div>
+<b>Initial value:</b><div class="fragment"><div class="line">{<a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/chest/ACC&quot;</span>,  <span class="stringliteral">&quot;tcp://127.0.0.1:5000&quot;</span>, <a class="code" href="data__config_8h.html#a87ef849bf041362d2131b5e7efd6a428">chest_fs</a>, 3,       Cfg::ACTIVE},</div>
+<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/chest/ECG&quot;</span>,  <span class="stringliteral">&quot;tcp://127.0.0.1:5001&quot;</span>, <a class="code" href="data__config_8h.html#a87ef849bf041362d2131b5e7efd6a428">chest_fs</a>, 1,       Cfg::ACTIVE},</div>
+<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/chest/EMG&quot;</span>,  <span class="stringliteral">&quot;tcp://127.0.0.1:5002&quot;</span>, <a class="code" href="data__config_8h.html#a87ef849bf041362d2131b5e7efd6a428">chest_fs</a>, 1,       Cfg::DISABLED},</div>
+<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/chest/EDA&quot;</span>,  <span class="stringliteral">&quot;tcp://127.0.0.1:5003&quot;</span>, <a class="code" href="data__config_8h.html#a87ef849bf041362d2131b5e7efd6a428">chest_fs</a>, 1,       Cfg::DISABLED},</div>
+<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/chest/Temp&quot;</span>, <span class="stringliteral">&quot;tcp://127.0.0.1:5004&quot;</span>, <a class="code" href="data__config_8h.html#a87ef849bf041362d2131b5e7efd6a428">chest_fs</a>, 1,       Cfg::DISABLED}, </div>
+<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/chest/Resp&quot;</span>, <span class="stringliteral">&quot;tcp://127.0.0.1:5005&quot;</span>, <a class="code" href="data__config_8h.html#a87ef849bf041362d2131b5e7efd6a428">chest_fs</a>, 1,       Cfg::DISABLED},</div>
+<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/wrist/ACC&quot;</span>,  <span class="stringliteral">&quot;tcp://127.0.0.1:5006&quot;</span>, 32,       3,       Cfg::DISABLED},</div>
+<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/wrist/BVP&quot;</span>,  <span class="stringliteral">&quot;tcp://127.0.0.1:5007&quot;</span>, 64,       1,       Cfg::DISABLED},</div>
+<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/wrist/EDA&quot;</span>,  <span class="stringliteral">&quot;tcp://127.0.0.1:5008&quot;</span>, 4,        1,       Cfg::DISABLED},</div>
+<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/wrist/TEMP&quot;</span>, <span class="stringliteral">&quot;tcp://127.0.0.1:5009&quot;</span>, 4,        1,       Cfg::DISABLED}}</div>
+<div class="ttc" id="adata__config_8h_html_a87ef849bf041362d2131b5e7efd6a428"><div class="ttname"><a href="data__config_8h.html#a87ef849bf041362d2131b5e7efd6a428">chest_fs</a></div><div class="ttdeci">constexpr size_t chest_fs</div><div class="ttdoc">N steps of data to send per channel for simulation; Also determines data chunk pre-read buffer size.</div><div class="ttdef"><b>Definition:</b> data_config.h:30</div></div>
+<div class="ttc" id="astructDataStreamConfig_html"><div class="ttname"><a href="structDataStreamConfig.html">DataStreamConfig</a></div><div class="ttdoc">Holds configuration for a single data stream/data source.</div><div class="ttdef"><b>Definition:</b> data_config.h:18</div></div>
 </div><!-- fragment -->
-<p>Size of data queue. </p>
+<p>Debugs recv data in <a class="el" href="classServer.html" title="Reads data from HDF5 file and send to TCP port via ZMQ connection.">Server</a> application. </p>
 <p >List of DataStreamConfigs. </p>
 <h1><a class="anchor" id="autotoc_md0"></a>
-|      PATH       |           PORT           |   fs   | Nchannels</h1>
+|      PATH       |           PORT           |   fs   | Nchannels | On/off |</h1>
 
 </div>
 </div>

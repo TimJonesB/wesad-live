@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['launch_5fclients_64',['launch_clients',['../run__client_8cpp.html#af22342069fff219efbcbef131eab8d2f',1,'run_client.cpp']]],
-  ['launch_5fservers_65',['launch_servers',['../run__server_8cpp.html#a75a82b9ffc9330403fed63e128ea74a2',1,'run_server.cpp']]]
+  ['main_67',['main',['../run__client_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main():&#160;run_client.cpp'],['../demo_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main():&#160;demo.cpp'],['../run__server_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main():&#160;run_server.cpp']]]
 ];
