@@ -19,7 +19,7 @@
  */
 template <size_t CurrentIndex>
 int launch_clients(std::vector<std::future<int>> &v, zmq::context_t &ctx) {
-    if constexpr(CurrentIndex-1){
+    if constexpr(CurrentIndex){
         v.push_back(std::async(std::launch::async, [&ctx](){return Client<CurrentIndex-1>(ctx).run();}));
         return launch_clients<CurrentIndex-1>(v, ctx);
     }
