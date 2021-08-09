@@ -20,7 +20,7 @@ struct DataStreamConfig {
     std::string_view port; /// tcp port to send/read data from for data stream
     int fs; /// frequency to transmit data over (sampling frequency)
     size_t Nchannels; /// number of channels per data transmission (ie 3 for acceleration x,y,z, 1 for ECG signal)
-    Cfg status;
+    Cfg status; // stream on (Cfg::ACTIVE) or off(Cfg::DISABLED)
     constexpr DataStreamConfig(const std::string_view path, const std::string_view port, const int fs, const size_t Nchannels, Cfg status) :
                                path {path}, port {port}, fs {fs}, Nchannels{Nchannels}, status{status} {}
 };
