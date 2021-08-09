@@ -69,6 +69,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#enum-members">Enumerations</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle"><div class="title">data_config.h File Reference</div></div>
 </div><!--header-->
@@ -82,6 +83,14 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structDataStreamConfig.html">DataStreamConfig</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Holds configuration for a single data stream/data source.  <a href="structDataStreamConfig.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:a3e0600422c6d82a16e50b552312f9fb7"><td class="memItemLeft" align="right" valign="top"><a id="a3e0600422c6d82a16e50b552312f9fb7" name="a3e0600422c6d82a16e50b552312f9fb7"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="data__config_8h.html#a3e0600422c6d82a16e50b552312f9fb7">Cfg</a> { <b>DISABLED</b> = 0
+, <b>ACTIVE</b> = 1
+ }</td></tr>
+<tr class="memdesc:a3e0600422c6d82a16e50b552312f9fb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">On/Off for each item in ConfigList. <br /></td></tr>
+<tr class="separator:a3e0600422c6d82a16e50b552312f9fb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
@@ -128,23 +137,23 @@ constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>data_queue_s
   </tr>
 </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">{<a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/chest/ACC&quot;</span>,  <span class="stringliteral">&quot;tcp://127.0.0.1:5000&quot;</span>, <a class="code" href="data__config_8h.html#afc83a68f8b80578f6ec69a13a81e806b">chest_fs</a>, 3},</div>
-<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/chest/ECG&quot;</span>,  <span class="stringliteral">&quot;tcp://127.0.0.1:5001&quot;</span>, <a class="code" href="data__config_8h.html#afc83a68f8b80578f6ec69a13a81e806b">chest_fs</a>, 1},</div>
-<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/chest/EMG&quot;</span>,  <span class="stringliteral">&quot;tcp://127.0.0.1:5002&quot;</span>, <a class="code" href="data__config_8h.html#afc83a68f8b80578f6ec69a13a81e806b">chest_fs</a>, 1},</div>
-<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/chest/EDA&quot;</span>,  <span class="stringliteral">&quot;tcp://127.0.0.1:5003&quot;</span>, <a class="code" href="data__config_8h.html#afc83a68f8b80578f6ec69a13a81e806b">chest_fs</a>, 1},</div>
-<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/chest/Temp&quot;</span>, <span class="stringliteral">&quot;tcp://127.0.0.1:5004&quot;</span>, <a class="code" href="data__config_8h.html#afc83a68f8b80578f6ec69a13a81e806b">chest_fs</a>, 1}, </div>
-<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/chest/Resp&quot;</span>, <span class="stringliteral">&quot;tcp://127.0.0.1:5005&quot;</span>, <a class="code" href="data__config_8h.html#afc83a68f8b80578f6ec69a13a81e806b">chest_fs</a>, 1},</div>
-<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/wrist/ACC&quot;</span>,  <span class="stringliteral">&quot;tcp://127.0.0.1:5006&quot;</span>, 32,       3},</div>
-<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/wrist/BVP&quot;</span>,  <span class="stringliteral">&quot;tcp://127.0.0.1:5007&quot;</span>, 64,       1},</div>
-<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/wrist/EDA&quot;</span>,  <span class="stringliteral">&quot;tcp://127.0.0.1:5008&quot;</span>, 4,        1},</div>
-<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/wrist/TEMP&quot;</span>, <span class="stringliteral">&quot;tcp://127.0.0.1:5009&quot;</span>, 4,        1}}</div>
-<div class="ttc" id="adata__config_8h_html_afc83a68f8b80578f6ec69a13a81e806b"><div class="ttname"><a href="data__config_8h.html#afc83a68f8b80578f6ec69a13a81e806b">chest_fs</a></div><div class="ttdeci">constexpr int chest_fs</div><div class="ttdoc">N steps of data to send per channel for simulation; Also determines data chunk pre-read buffer size.</div><div class="ttdef"><b>Definition:</b> data_config.h:21</div></div>
-<div class="ttc" id="astructDataStreamConfig_html"><div class="ttname"><a href="structDataStreamConfig.html">DataStreamConfig</a></div><div class="ttdoc">Holds configuration for a single data stream/data source.</div><div class="ttdef"><b>Definition:</b> data_config.h:10</div></div>
+<b>Initial value:</b><div class="fragment"><div class="line">{<a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/chest/ACC&quot;</span>,  <span class="stringliteral">&quot;tcp://127.0.0.1:5000&quot;</span>, <a class="code" href="data__config_8h.html#afc83a68f8b80578f6ec69a13a81e806b">chest_fs</a>, 3,       Cfg::ACTIVE},</div>
+<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/chest/ECG&quot;</span>,  <span class="stringliteral">&quot;tcp://127.0.0.1:5001&quot;</span>, <a class="code" href="data__config_8h.html#afc83a68f8b80578f6ec69a13a81e806b">chest_fs</a>, 1,       Cfg::ACTIVE},</div>
+<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/chest/EMG&quot;</span>,  <span class="stringliteral">&quot;tcp://127.0.0.1:5002&quot;</span>, <a class="code" href="data__config_8h.html#afc83a68f8b80578f6ec69a13a81e806b">chest_fs</a>, 1,       Cfg::DISABLED},</div>
+<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/chest/EDA&quot;</span>,  <span class="stringliteral">&quot;tcp://127.0.0.1:5003&quot;</span>, <a class="code" href="data__config_8h.html#afc83a68f8b80578f6ec69a13a81e806b">chest_fs</a>, 1,       Cfg::DISABLED},</div>
+<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/chest/Temp&quot;</span>, <span class="stringliteral">&quot;tcp://127.0.0.1:5004&quot;</span>, <a class="code" href="data__config_8h.html#afc83a68f8b80578f6ec69a13a81e806b">chest_fs</a>, 1,       Cfg::DISABLED}, </div>
+<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/chest/Resp&quot;</span>, <span class="stringliteral">&quot;tcp://127.0.0.1:5005&quot;</span>, <a class="code" href="data__config_8h.html#afc83a68f8b80578f6ec69a13a81e806b">chest_fs</a>, 1,       Cfg::DISABLED},</div>
+<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/wrist/ACC&quot;</span>,  <span class="stringliteral">&quot;tcp://127.0.0.1:5006&quot;</span>, 32,       3,       Cfg::DISABLED},</div>
+<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/wrist/BVP&quot;</span>,  <span class="stringliteral">&quot;tcp://127.0.0.1:5007&quot;</span>, 64,       1,       Cfg::DISABLED},</div>
+<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/wrist/EDA&quot;</span>,  <span class="stringliteral">&quot;tcp://127.0.0.1:5008&quot;</span>, 4,        1,       Cfg::DISABLED},</div>
+<div class="line">                                 <a class="code" href="structDataStreamConfig.html">DataStreamConfig</a>  {<span class="stringliteral">&quot;/signal/wrist/TEMP&quot;</span>, <span class="stringliteral">&quot;tcp://127.0.0.1:5009&quot;</span>, 4,        1,       Cfg::DISABLED}}</div>
+<div class="ttc" id="adata__config_8h_html_afc83a68f8b80578f6ec69a13a81e806b"><div class="ttname"><a href="data__config_8h.html#afc83a68f8b80578f6ec69a13a81e806b">chest_fs</a></div><div class="ttdeci">constexpr int chest_fs</div><div class="ttdoc">N steps of data to send per channel for simulation; Also determines data chunk pre-read buffer size.</div><div class="ttdef"><b>Definition:</b> data_config.h:30</div></div>
+<div class="ttc" id="astructDataStreamConfig_html"><div class="ttname"><a href="structDataStreamConfig.html">DataStreamConfig</a></div><div class="ttdoc">Holds configuration for a single data stream/data source.</div><div class="ttdef"><b>Definition:</b> data_config.h:18</div></div>
 </div><!-- fragment -->
 <p>Size of data queue. </p>
 <p >List of DataStreamConfigs. </p>
 <h1><a class="anchor" id="autotoc_md0"></a>
-|      PATH       |           PORT           |   fs   | Nchannels</h1>
+|      PATH       |           PORT           |   fs   | Nchannels | On/off |</h1>
 
 </div>
 </div>

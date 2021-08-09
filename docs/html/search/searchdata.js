@@ -4,10 +4,11 @@ var indexSectionsWithContent =
   1: "cdhpqs",
   2: "c",
   3: "cdhpqrs",
-  4: "cdelmpqrs",
-  5: "cdfnpt",
+  4: "celmpqrs",
+  5: "cdfnpst",
   6: "d",
-  7: "tw"
+  7: "c",
+  8: "tw"
 };
 
 var indexSectionNames =
@@ -19,7 +20,8 @@ var indexSectionNames =
   4: "functions",
   5: "variables",
   6: "typedefs",
-  7: "pages"
+  7: "enums",
+  8: "pages"
 };
 
 var indexSectionLabels =
@@ -31,6 +33,7 @@ var indexSectionLabels =
   4: "Functions",
   5: "Variables",
   6: "Typedefs",
-  7: "Pages"
+  7: "Enumerations",
+  8: "Pages"
 };
 

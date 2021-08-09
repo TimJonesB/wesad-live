@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['datastreamconfig_62',['DataStreamConfig',['../structDataStreamConfig.html#a04243a781530acd5781d5137cd02e518',1,'DataStreamConfig']]]
+  ['empty_64',['empty',['../classQueueMgr.html#a60b2d02af8a01389c56a544964be7603',1,'QueueMgr']]]
 ];
