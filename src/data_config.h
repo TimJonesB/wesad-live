@@ -18,19 +18,19 @@ enum class Cfg {
 struct DataStreamConfig {
     std::string_view path; /// path from root of HDF5 data source file to data stream data
     std::string_view port; /// tcp port to send/read data from for data stream
-    int fs; /// frequency to transmit data over (sampling frequency)
+    size_t fs; /// frequency to transmit data over (sampling frequency)
     size_t Nchannels; /// number of channels per data transmission (ie 3 for acceleration x,y,z, 1 for ECG signal)
     Cfg status; // stream on (Cfg::ACTIVE) or off(Cfg::DISABLED)
-    constexpr DataStreamConfig(const std::string_view path, const std::string_view port, const int fs, const size_t Nchannels, Cfg status) :
+    constexpr DataStreamConfig(const std::string_view path, const std::string_view port, const size_t fs, const size_t Nchannels, Cfg status) :
                                path {path}, port {port}, fs {fs}, Nchannels{Nchannels}, status{status} {}
 };
 
 
 constexpr size_t nsteps = 10000; /// N steps of data to send per channel for simulation; Also determines data chunk pre-read buffer size
-constexpr int chest_fs = 700; /// Reference param for chest data sampling frequency
-constexpr bool test_speed = 1; /// Triggers a data transmission speed test
+constexpr size_t chest_fs = 700; /// Reference param for chest data sampling frequency
+constexpr size_t data_queue_sz = 1024; /// Size of data queue
+constexpr bool test_speed = 0; /// Triggers a data transmission speed test
 constexpr bool debug_recv = 0; /// Debugs recv data in Server application
-constexpr int data_queue_sz = 1024; /// Size of data queue
 
 /** 
  * @brief  List of DataStreamConfigs.
