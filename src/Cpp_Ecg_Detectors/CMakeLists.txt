@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 project(Cpp_Ecg_Detectors)
 
-add_library(Cpp_Ecg_Detectors
+add_library(Cpp_Ecg_Detectors SHARED
             realtime/DetectorEngZeeRealTime.cpp
             realtime/DetectorPanTompkins.cpp
             iir1/Butterworth.cpp
@@ -17,7 +17,7 @@ add_library(Cpp_Ecg_Detectors
 )
 set(CMAKE_CXX_STANDARD 14)
 
-target_include_directories(Cpp_Ecg_Detectors PUBLIC
+target_include_directories(Cpp_Ecg_Detectors INTERFACE
                            handlers
                            iir1
                            realtime)

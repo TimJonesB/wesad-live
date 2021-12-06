@@ -10,7 +10,7 @@
 #include <thread>
 #include <vector>
 #include "h5_data.h"
-#include "Detectors.h"
+#include "realtime/Detectors.h"
 /** 
  * @brief Entry point for demonstration application. 
  * Launches the client and server applications.
@@ -32,7 +32,10 @@ int main() {
     int fs = 700;
     DetectorPanTompkins det = DetectorPanTompkins(fs);
     for (auto val : v) {
-        std::cout << val << std::endl;
+        auto res = det.processSample(val); 
+        if (res != -1) {
+            std::cout << "ding" << std::endl;
+        }
     }
 
     return 0;

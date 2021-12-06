@@ -12,8 +12,8 @@ add_executable(WesadLive
 
 # add_subdirectory(src/server)
 # add_subdirectory(src/client)
-
 add_subdirectory(src/Cpp_Ecg_Detectors)
+
 find_package(HDF5 REQUIRED COMPONENTS C)
 find_package(Threads REQUIRED)
 
@@ -23,10 +23,11 @@ target_include_directories(WesadLive PUBLIC
                            src
                            src/client
                            src/server
-                           src/Cpp_Ecg_Detectors/realtime
+                           src/Cpp_Ecg_Detectors
                           )
 
 target_link_libraries (WesadLive 
                        ${HDF5_C_LIBRARIES}
                        ${CMAKE_THREAD_LIBS_INIT}
+                       Cpp_Ecg_Detectors
                        )
