@@ -5,11 +5,15 @@ project(WesadLive VERSION 1.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-add_executable(WesadLive src/demo.cpp)
+add_executable(WesadLive 
+               src/demo.cpp
+)
 
-add_subdirectory(src/client)
-add_subdirectory(src/server)
 
+# add_subdirectory(src/server)
+# add_subdirectory(src/client)
+
+add_subdirectory(src/Cpp_Ecg_Detectors)
 find_package(HDF5 REQUIRED COMPONENTS C)
 find_package(Threads REQUIRED)
 
@@ -17,6 +21,9 @@ target_include_directories(WesadLive PUBLIC
                            ${PROJECT_BINARY_DIR}
                            ${HDF5_INCLUDE_DIRS}
                            src
+                           src/client
+                           src/server
+                           src/Cpp_Ecg_Detectors/realtime
                           )
 
 target_link_libraries (WesadLive 

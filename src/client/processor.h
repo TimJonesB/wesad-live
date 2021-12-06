@@ -6,6 +6,8 @@
 #include <map>
 #include <array>
 
+#include <armadillo>
+
 #include "client.h"
 #include "data_config.h"
 
@@ -23,6 +25,7 @@ private:
     int proc_q();
     template <size_t CurrentIndex>
     int proc_all_q();
+
 };
 
 
@@ -85,6 +88,78 @@ inline int Processor::proc_q() {
 
     return 0;
 }
+
+
+class ProcBuf {
+public:
+
+    ProcBuf() {
+        buf.zeros();
+    }
+
+    ~ProcBuf() = default;
+
+    template <typename T>
+    ProcBuf& insert(T val) {
+        buf(index % ProcBufLen) = val;
+        inc_index();
+        return *this;
+    }
+
+    friend std::ostream& operator<<(std::ostream &out, const ProcBuf &rhs){
+        out << rhs.buf;
+        return out;
+    }
+
+    auto mean() {
+        return arma::mean(buf);
+    }
+
+    auto stddev() {
+        return arma::stddev(buf);
+    }
+
+    auto max() {
+        return arma::max(buf);
+    }
+
+    auto min() {
+        return arma::min(buf);
+    }
+
+    auto dyn_range() {
+        return arma::range(buf);
+    }
+
+    auto dom_fq(size_t fs) {
+        arma::vec fft_res = arma::abs(arma::fft(buf)/buf.size());
+        arma::vec fft_res_1side = fft_res(arma::span(0, buf.size()/2)) * 2;
+        arma::vec f_fft = arma::linspace(0, fs, buf.size());
+        arma::vec f_fft1 = f_fft(arma::span(0, (buf.size()/2)));
+        auto fft_sort = arma::sort_index(fft_res_1side, "descend");
+        arma::vec  fq_ranked = f_fft1(fft_sort);
+        double result = fq_ranked(0) != 0 ? fq_ranked(0) : fq_ranked(1);
+        return result;
+    }
+
+private:
+
+    void inc_index() {
+        index = (index < ProcBufLen - 1) ? index + 1 : 0;
+    }
+
+    arma::vec::fixed<ProcBufLen> buf;
+    int index = 0;
+
+};
+
+
+
+
+
+
+
+
 
 
 #endif //PROCESSORH
