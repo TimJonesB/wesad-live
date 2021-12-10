@@ -131,6 +131,31 @@ public:
         return arma::range(buf);
     }
 
+    int ecg() {
+        // std::future<int> f1 = std::async(std::launch::async,
+        //                                  [](){return system("./src/server/server");});
+
+        // std::future<int> f2 = std::async(std::launch::async,
+        //                                  [](){return system("./src/cl
+        const size_t bufsz = 7000;
+        double buf[bufsz][1];
+        hd.read_chunk("/signal/chest/ECG", 2000, 2000+bufsz, buf);
+        std::vector<double> v;
+        for (int i = 0; i < bufsz; i++) {
+            v.push_back(buf[i][0]);
+        }
+        int fs = 700;
+        DetectorPanTompkins det = DetectorPanTompkins(fs);
+        for (auto val : v) {
+            auto res = det.processSample(val); 
+            if (res != -1) {
+                std::cout << "ding" << std::endl;
+            }
+        }
+
+        return 0;
+    }
+
     auto dom_fq(size_t fs) {
         arma::vec fft_res = arma::abs(arma::fft(buf)/buf.size());
         arma::vec fft_res_1side = fft_res(arma::span(0, buf.size()/2)) * 2;
@@ -141,6 +166,7 @@ public:
         double result = fq_ranked(0) != 0 ? fq_ranked(0) : fq_ranked(1);
         return result;
     }
+    
 
 private:
 
