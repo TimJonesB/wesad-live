@@ -1,3 +1,0 @@
-/home/tim/repos/Cpp_Ecg_Detectors/build/CMakeFiles/rebuild_cache.dir
-/home/tim/repos/Cpp_Ecg_Detectors/build/CMakeFiles/edit_cache.dir
-/home/tim/repos/Cpp_Ecg_Detectors/build/CMakeFiles/Cpp_Ecg_Detectors.dir

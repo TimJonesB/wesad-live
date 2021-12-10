@@ -10,6 +10,7 @@
 
 #include "client.h"
 #include "data_config.h"
+#include "realtime/Detectors.h"
 
 /** 
  * @brief Continously loops through DataQueue's and processes data.
@@ -17,6 +18,82 @@
  * 
  * Continously inspects all DataQueues, pop's data off if available, and processes according to algorithms being used. 
  */
+
+class ProcBuf {
+public:
+
+    ProcBuf() {
+        buf.zeros();
+    }
+
+    ~ProcBuf() = default;
+
+    template <typename T>
+    ProcBuf& insert(T val) {
+        buf(index % ProcBufLen) = val;
+        inc_index();
+        return *this;
+    }
+
+    friend std::ostream& operator<<(std::ostream &out, const ProcBuf &rhs){
+        out << rhs.buf;
+        return out;
+    }
+
+    auto mean() {
+        return arma::mean(buf);
+    }
+
+    auto stddev() {
+        return arma::stddev(buf);
+    }
+
+    auto max() {
+        return arma::max(buf);
+    }
+
+    auto min() {
+        return arma::min(buf);
+    }
+
+    auto dyn_range() {
+        return arma::range(buf);
+    }
+
+    int ecg(double val) {
+        int fs = 700;
+        auto res = ecg_det.processSample(val); 
+        if (res != -1) {
+            std::cout << "HeartBeat" << std::endl;
+        }
+        return 0;
+    }
+
+    auto dom_fq(size_t fs) {
+        arma::vec fft_res = arma::abs(arma::fft(buf)/buf.size());
+        arma::vec fft_res_1side = fft_res(arma::span(0, buf.size()/2)) * 2;
+        arma::vec f_fft = arma::linspace(0, fs, buf.size());
+        arma::vec f_fft1 = f_fft(arma::span(0, (buf.size()/2)));
+        auto fft_sort = arma::sort_index(fft_res_1side, "descend");
+        arma::vec  fq_ranked = f_fft1(fft_sort);
+        double result = fq_ranked(0) != 0 ? fq_ranked(0) : fq_ranked(1);
+        return result;
+    }
+    
+
+private:
+
+    void inc_index() {
+        index = (index < ProcBufLen - 1) ? index + 1 : 0;
+    }
+
+    arma::vec::fixed<ProcBufLen> buf;
+    DetectorPanTompkins ecg_det = DetectorPanTompkins(700);
+    int index = 0;
+
+};
+
+
 class Processor {
 public:
     int run();
@@ -25,7 +102,8 @@ private:
     int proc_q();
     template <size_t CurrentIndex>
     int proc_all_q();
-
+    std::array<double, std::size(ConfigList)> state;
+    ProcBuf pbuff; 
 };
 
 
@@ -69,17 +147,21 @@ inline int Processor::proc_all_q(){
  * Processes DataQueue at ConfigIndex by popping data from Queue and providing to processor.
  * @returns 0
  */
+
 template <size_t ConfigIndex>
 inline int Processor::proc_q() {
     QueueMgr<ConfigIndex> q;
     if (!q.empty()) {
         std::array<double, ConfigList[ConfigIndex].Nchannels> arr;
         q.pop(arr);
-        std::cout << "popped :";
+        // std::cout << "popped :";
         for (int i = 0; i < arr.size(); i++) {
-            std::cout << " " << arr[i];
+            // std::cout << " " << arr[i];
+            if constexpr(ConfigIndex == 1) {
+                pbuff.ecg(arr[i]);
+            }
         }
-        std::cout << " from " << ConfigList[ConfigIndex].path  << std::endl;
+        // std::cout << " from " << ConfigList[ConfigIndex].path  << std::endl;
 
     }
     else {
@@ -90,94 +172,6 @@ inline int Processor::proc_q() {
 }
 
 
-class ProcBuf {
-public:
-
-    ProcBuf() {
-        buf.zeros();
-    }
-
-    ~ProcBuf() = default;
-
-    template <typename T>
-    ProcBuf& insert(T val) {
-        buf(index % ProcBufLen) = val;
-        inc_index();
-        return *this;
-    }
-
-    friend std::ostream& operator<<(std::ostream &out, const ProcBuf &rhs){
-        out << rhs.buf;
-        return out;
-    }
-
-    auto mean() {
-        return arma::mean(buf);
-    }
-
-    auto stddev() {
-        return arma::stddev(buf);
-    }
-
-    auto max() {
-        return arma::max(buf);
-    }
-
-    auto min() {
-        return arma::min(buf);
-    }
-
-    auto dyn_range() {
-        return arma::range(buf);
-    }
-
-    int ecg() {
-        // std::future<int> f1 = std::async(std::launch::async,
-        //                                  [](){return system("./src/server/server");});
-
-        // std::future<int> f2 = std::async(std::launch::async,
-        //                                  [](){return system("./src/cl
-        const size_t bufsz = 7000;
-        double buf[bufsz][1];
-        hd.read_chunk("/signal/chest/ECG", 2000, 2000+bufsz, buf);
-        std::vector<double> v;
-        for (int i = 0; i < bufsz; i++) {
-            v.push_back(buf[i][0]);
-        }
-        int fs = 700;
-        DetectorPanTompkins det = DetectorPanTompkins(fs);
-        for (auto val : v) {
-            auto res = det.processSample(val); 
-            if (res != -1) {
-                std::cout << "ding" << std::endl;
-            }
-        }
-
-        return 0;
-    }
-
-    auto dom_fq(size_t fs) {
-        arma::vec fft_res = arma::abs(arma::fft(buf)/buf.size());
-        arma::vec fft_res_1side = fft_res(arma::span(0, buf.size()/2)) * 2;
-        arma::vec f_fft = arma::linspace(0, fs, buf.size());
-        arma::vec f_fft1 = f_fft(arma::span(0, (buf.size()/2)));
-        auto fft_sort = arma::sort_index(fft_res_1side, "descend");
-        arma::vec  fq_ranked = f_fft1(fft_sort);
-        double result = fq_ranked(0) != 0 ? fq_ranked(0) : fq_ranked(1);
-        return result;
-    }
-    
-
-private:
-
-    void inc_index() {
-        index = (index < ProcBufLen - 1) ? index + 1 : 0;
-    }
-
-    arma::vec::fixed<ProcBufLen> buf;
-    int index = 0;
-
-};
 
 
 

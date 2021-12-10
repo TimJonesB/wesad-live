@@ -7,9 +7,11 @@ find_package(cppzmq REQUIRED)
 find_package(Boost REQUIRED)
 find_package(Armadillo REQUIRED)
 
+add_subdirectory(Cpp_Ecg_Detectors)
 target_include_directories(client PUBLIC
                            ${CMAKE_CURRENT_SOURCE_DIR}
                            ${CMAKE_CURRENT_SOURCE_DIR}/..
+                           Cpp_Ecg_Detectors
                            ${PROJECT_BINARY_DIR}
                            ${HDF5_INCLUDE_DIRS}
                            ${Boost_INCLUDE_DIRS}
@@ -21,4 +23,5 @@ target_link_libraries (client
                        cppzmq
                        ${Boost_LIBRARY_DIRS}
                        ${ARMADILLO_LIBRARIES}
+                       Cpp_Ecg_Detectors
                       )
