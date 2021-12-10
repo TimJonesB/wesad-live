@@ -1,0 +1,62 @@
+[
+{
+  "directory": "/home/tim/repos/Cpp_Ecg_Detectors/build",
+  "command": "/usr/bin/g++-9   -I/home/tim/repos/Cpp_Ecg_Detectors/handlers -I/home/tim/repos/Cpp_Ecg_Detectors/iir1 -I/home/tim/repos/Cpp_Ecg_Detectors/realtime  -g   -std=gnu++14 -o CMakeFiles/Cpp_Ecg_Detectors.dir/realtime/DetectorEngZeeRealTime.cpp.o -c /home/tim/repos/Cpp_Ecg_Detectors/realtime/DetectorEngZeeRealTime.cpp",
+  "file": "/home/tim/repos/Cpp_Ecg_Detectors/realtime/DetectorEngZeeRealTime.cpp"
+},
+{
+  "directory": "/home/tim/repos/Cpp_Ecg_Detectors/build",
+  "command": "/usr/bin/g++-9   -I/home/tim/repos/Cpp_Ecg_Detectors/handlers -I/home/tim/repos/Cpp_Ecg_Detectors/iir1 -I/home/tim/repos/Cpp_Ecg_Detectors/realtime  -g   -std=gnu++14 -o CMakeFiles/Cpp_Ecg_Detectors.dir/realtime/DetectorPanTompkins.cpp.o -c /home/tim/repos/Cpp_Ecg_Detectors/realtime/DetectorPanTompkins.cpp",
+  "file": "/home/tim/repos/Cpp_Ecg_Detectors/realtime/DetectorPanTompkins.cpp"
+},
+{
+  "directory": "/home/tim/repos/Cpp_Ecg_Detectors/build",
+  "command": "/usr/bin/g++-9   -I/home/tim/repos/Cpp_Ecg_Detectors/handlers -I/home/tim/repos/Cpp_Ecg_Detectors/iir1 -I/home/tim/repos/Cpp_Ecg_Detectors/realtime  -g   -std=gnu++14 -o CMakeFiles/Cpp_Ecg_Detectors.dir/iir1/Butterworth.cpp.o -c /home/tim/repos/Cpp_Ecg_Detectors/iir1/Butterworth.cpp",
+  "file": "/home/tim/repos/Cpp_Ecg_Detectors/iir1/Butterworth.cpp"
+},
+{
+  "directory": "/home/tim/repos/Cpp_Ecg_Detectors/build",
+  "command": "/usr/bin/g++-9   -I/home/tim/repos/Cpp_Ecg_Detectors/handlers -I/home/tim/repos/Cpp_Ecg_Detectors/iir1 -I/home/tim/repos/Cpp_Ecg_Detectors/realtime  -g   -std=gnu++14 -o CMakeFiles/Cpp_Ecg_Detectors.dir/iir1/Biquad.cpp.o -c /home/tim/repos/Cpp_Ecg_Detectors/iir1/Biquad.cpp",
+  "file": "/home/tim/repos/Cpp_Ecg_Detectors/iir1/Biquad.cpp"
+},
+{
+  "directory": "/home/tim/repos/Cpp_Ecg_Detectors/build",
+  "command": "/usr/bin/g++-9   -I/home/tim/repos/Cpp_Ecg_Detectors/handlers -I/home/tim/repos/Cpp_Ecg_Detectors/iir1 -I/home/tim/repos/Cpp_Ecg_Detectors/realtime  -g   -std=gnu++14 -o CMakeFiles/Cpp_Ecg_Detectors.dir/iir1/Cascade.cpp.o -c /home/tim/repos/Cpp_Ecg_Detectors/iir1/Cascade.cpp",
+  "file": "/home/tim/repos/Cpp_Ecg_Detectors/iir1/Cascade.cpp"
+},
+{
+  "directory": "/home/tim/repos/Cpp_Ecg_Detectors/build",
+  "command": "/usr/bin/g++-9   -I/home/tim/repos/Cpp_Ecg_Detectors/handlers -I/home/tim/repos/Cpp_Ecg_Detectors/iir1 -I/home/tim/repos/Cpp_Ecg_Detectors/realtime  -g   -std=gnu++14 -o CMakeFiles/Cpp_Ecg_Detectors.dir/iir1/PoleFilter.cpp.o -c /home/tim/repos/Cpp_Ecg_Detectors/iir1/PoleFilter.cpp",
+  "file": "/home/tim/repos/Cpp_Ecg_Detectors/iir1/PoleFilter.cpp"
+},
+{
+  "directory": "/home/tim/repos/Cpp_Ecg_Detectors/build",
+  "command": "/usr/bin/g++-9   -I/home/tim/repos/Cpp_Ecg_Detectors/handlers -I/home/tim/repos/Cpp_Ecg_Detectors/iir1 -I/home/tim/repos/Cpp_Ecg_Detectors/realtime  -g   -std=gnu++14 -o CMakeFiles/Cpp_Ecg_Detectors.dir/iir1/State.cpp.o -c /home/tim/repos/Cpp_Ecg_Detectors/iir1/State.cpp",
+  "file": "/home/tim/repos/Cpp_Ecg_Detectors/iir1/State.cpp"
+},
+{
+  "directory": "/home/tim/repos/Cpp_Ecg_Detectors/build",
+  "command": "/usr/bin/g++-9   -I/home/tim/repos/Cpp_Ecg_Detectors/handlers -I/home/tim/repos/Cpp_Ecg_Detectors/iir1 -I/home/tim/repos/Cpp_Ecg_Detectors/realtime  -g   -std=gnu++14 -o CMakeFiles/Cpp_Ecg_Detectors.dir/handlers/MoveDifference.cpp.o -c /home/tim/repos/Cpp_Ecg_Detectors/handlers/MoveDifference.cpp",
+  "file": "/home/tim/repos/Cpp_Ecg_Detectors/handlers/MoveDifference.cpp"
+},
+{
+  "directory": "/home/tim/repos/Cpp_Ecg_Detectors/build",
+  "command": "/usr/bin/g++-9   -I/home/tim/repos/Cpp_Ecg_Detectors/handlers -I/home/tim/repos/Cpp_Ecg_Detectors/iir1 -I/home/tim/repos/Cpp_Ecg_Detectors/realtime  -g   -std=gnu++14 -o CMakeFiles/Cpp_Ecg_Detectors.dir/handlers/Convolution.cpp.o -c /home/tim/repos/Cpp_Ecg_Detectors/handlers/Convolution.cpp",
+  "file": "/home/tim/repos/Cpp_Ecg_Detectors/handlers/Convolution.cpp"
+},
+{
+  "directory": "/home/tim/repos/Cpp_Ecg_Detectors/build",
+  "command": "/usr/bin/g++-9   -I/home/tim/repos/Cpp_Ecg_Detectors/handlers -I/home/tim/repos/Cpp_Ecg_Detectors/iir1 -I/home/tim/repos/Cpp_Ecg_Detectors/realtime  -g   -std=gnu++14 -o CMakeFiles/Cpp_Ecg_Detectors.dir/handlers/MWA.cpp.o -c /home/tim/repos/Cpp_Ecg_Detectors/handlers/MWA.cpp",
+  "file": "/home/tim/repos/Cpp_Ecg_Detectors/handlers/MWA.cpp"
+},
+{
+  "directory": "/home/tim/repos/Cpp_Ecg_Detectors/build",
+  "command": "/usr/bin/g++-9   -I/home/tim/repos/Cpp_Ecg_Detectors/handlers -I/home/tim/repos/Cpp_Ecg_Detectors/iir1 -I/home/tim/repos/Cpp_Ecg_Detectors/realtime  -g   -std=gnu++14 -o CMakeFiles/Cpp_Ecg_Detectors.dir/handlers/VectorFunctions.cpp.o -c /home/tim/repos/Cpp_Ecg_Detectors/handlers/VectorFunctions.cpp",
+  "file": "/home/tim/repos/Cpp_Ecg_Detectors/handlers/VectorFunctions.cpp"
+},
+{
+  "directory": "/home/tim/repos/Cpp_Ecg_Detectors/build",
+  "command": "/usr/bin/g++-9   -I/home/tim/repos/Cpp_Ecg_Detectors/handlers -I/home/tim/repos/Cpp_Ecg_Detectors/iir1 -I/home/tim/repos/Cpp_Ecg_Detectors/realtime  -g   -std=gnu++14 -o CMakeFiles/Cpp_Ecg_Detectors.dir/handlers/PanPeakDetector.cpp.o -c /home/tim/repos/Cpp_Ecg_Detectors/handlers/PanPeakDetector.cpp",
+  "file": "/home/tim/repos/Cpp_Ecg_Detectors/handlers/PanPeakDetector.cpp"
+}
+]
