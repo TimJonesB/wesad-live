@@ -33,6 +33,7 @@ constexpr bool test_speed = 0; /// Triggers a data transmission speed test
 constexpr bool debug_recv = 0; /// Debugs recv data in Server application
 
 constexpr size_t ProcBufLen = 6;
+constexpr size_t HeartBeatBufLen = 6;
 /** 
  * @brief  List of DataStreamConfigs.
  *                                                 |      PATH       |           PORT           |   fs   | Nchannels | On/off |

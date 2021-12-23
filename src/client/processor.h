@@ -19,6 +19,7 @@
  * Continously inspects all DataQueues, pop's data off if available, and processes according to algorithms being used. 
  */
 
+template <size_t ConfigIndex>
 class ProcBuf {
 public:
 
@@ -64,9 +65,13 @@ public:
         int fs = 700;
         auto res = ecg_det.processSample(val); 
         if (res != -1) {
-            std::cout << "HeartBeat" << std::endl;
+            return 1;
         }
         return 0;
+    }
+
+    int hr() {
+        return 0;     
     }
 
     auto dom_fq(size_t fs) {
@@ -79,7 +84,7 @@ public:
         double result = fq_ranked(0) != 0 ? fq_ranked(0) : fq_ranked(1);
         return result;
     }
-    
+
 
 private:
 
@@ -87,35 +92,42 @@ private:
         index = (index < ProcBufLen - 1) ? index + 1 : 0;
     }
 
-    arma::vec::fixed<ProcBufLen> buf;
+    arma::mat::fixed<ProcBufLen, ConfigList[ConfigIndex].Nchannels> buf;
+    arma::vec::fixed<HeartBeatBufLen> hrbuf;
+    size_t hr_interval = 0;
+
     DetectorPanTompkins ecg_det = DetectorPanTompkins(700);
     int index = 0;
 
 };
 
-
 class Processor {
 public:
     int run();
 private:
-    template <size_t ConfigIndex>
-    int proc_q();
     template <size_t CurrentIndex>
-    int proc_all_q();
+    int proc_all_feats();
     std::array<double, std::size(ConfigList)> state;
-    ProcBuf pbuff; 
 };
 
 
+template <size_t ConfigIndex>
+class FeatureProcessor {
+public:
+private:
+    int proc_q<ConfigIndex>();
+    int calc_feature<ConfigIndex>();
+};
+
 /** 
- * @brief Continously calls proc_all_q.
+ * @brief Continously calls proc_all_feats.
  * 
- * Continously calls proc_all_q which loops through DataQueue's and processes data.
+ * Continously calls proc_all_feats which loops through DataQueue's and processes data.
  * @returns Runs indefinitely
  */
 inline int Processor::run() {
     while(1) {
-        proc_all_q<std::size(ConfigList)-1>();
+        proc_all_feats<std::size(ConfigList)-1>();
     }
     return 0;
 }
@@ -129,10 +141,10 @@ inline int Processor::run() {
  * @returns 0
  */
 template<size_t CurrentIndex>
-inline int Processor::proc_all_q(){
+inline int Processor::proc_all_feats(){
     proc_q<CurrentIndex>();
     if constexpr (CurrentIndex) {
-        return proc_all_q<CurrentIndex-1>();
+        return proc_all_feats<CurrentIndex-1>();
     }
     else {
         return 0;
@@ -147,20 +159,25 @@ inline int Processor::proc_all_q(){
  * Processes DataQueue at ConfigIndex by popping data from Queue and providing to processor.
  * @returns 0
  */
+template<size t ConfigIndex, std::enable_if<ConfigIndex == 0 || ConfigIndex == 6>>
+int FeatureProcessor<ConfigIndex>::calc_feature(std::array<couble, ConfigList1].Nchannels> arr) {
+    std::cout << "Specialized 0 || 6 one" << std::endl;
+    return 0;
+}
+
 
 template <size_t ConfigIndex>
 inline int Processor::proc_q() {
     QueueMgr<ConfigIndex> q;
     if (!q.empty()) {
         std::array<double, ConfigList[ConfigIndex].Nchannels> arr;
-        q.pop(arr);
+        q.pop(arr); // pop top of q and put into arr memory
         // std::cout << "popped :";
         for (int i = 0; i < arr.size(); i++) {
+            calc_feature<ConfigIndex>(arr);
             // std::cout << " " << arr[i];
-            if constexpr(ConfigIndex == 1) {
-                pbuff.ecg(arr[i]);
-            }
         }
+        
         // std::cout << " from " << ConfigList[ConfigIndex].path  << std::endl;
 
     }
