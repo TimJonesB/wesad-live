@@ -157,16 +157,17 @@ inline int Processor::proc_all_feats(){
  * @returns 0
  */
 template<size_t ConfigIndex>
-int Processor::calc_feature(std::array<double, ConfigList[ConfigIndex].Nchannels> arr) {
-    std::cout << "base" << std::endl;
+inline int Processor::calc_feature(std::array<double, ConfigList[ConfigIndex].Nchannels> arr) {
+    if constexpr (ConfigIndex == 0) {
+        // handle this specific chanel
+    }
+    if constexpr (ConfigIndex == 1) {
+        std::cout << "yeet" << std::endl;
+        // handle this specific chanel
+    }
     return 0;
 }
 
-template<>
-int Processor::calc_feature<1>(std::array<double, ConfigList[1].Nchannels> arr) {
-    std::cout << "specialized" << std::endl;
-    return 0;
-}
 
 template <size_t ConfigIndex>
 inline int Processor::proc_q() {
