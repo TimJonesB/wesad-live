@@ -22,9 +22,9 @@
 template <size_t ConfigIndex>
 class ProcBuf {
 public:
-
     ProcBuf() {
         buf.zeros();
+        hrbuf.zeros();
     }
 
     ~ProcBuf() = default;
@@ -106,15 +106,20 @@ public:
     int run();
 private:
     template <size_t CurrentIndex>
-    int proc_all_feats();
+    int init_feature_procs(std::vector<std::future<int>> &v);
     std::array<double, std::size(ConfigList)> state;
-    template<size_t ConfigIndex>
-    int proc_q();
-    template<size_t ConfigIndex>
-    int calc_feature(std::array<double, ConfigList[ConfigIndex].Nchannels> arr);
 };
 
 
+template<size_t ConfigIndex>
+class FeatureProcessor{
+public:
+    int run();
+private:
+    int calc_feature(std::array<double, ConfigList[ConfigIndex].Nchannels> arr);
+    ProcBuf<ConfigIndex> pbuff;
+    QueueMgr<ConfigIndex> q;
+};
 
 /** 
  * @brief Continously calls proc_all_feats.
@@ -123,9 +128,8 @@ private:
  * @returns Runs indefinitely
  */
 inline int Processor::run() {
-    while(1) {
-        proc_all_feats<std::size(ConfigList)-1>();
-    }
+    std::vector<std::future<int>> v;
+    init_feature_procs<std::size(ConfigList)-1>(v);
     return 0;
 }
 
@@ -138,10 +142,14 @@ inline int Processor::run() {
  * @returns 0
  */
 template<size_t CurrentIndex>
-inline int Processor::proc_all_feats(){
-    proc_q<CurrentIndex>();
-    if constexpr (CurrentIndex) {
-        return proc_all_feats<CurrentIndex-1>();
+inline int Processor::init_feature_procs(std::vector<std::future<int>> &v){
+    std::cout << "current idx: " << CurrentIndex << std::endl;
+    if constexpr (CurrentIndex+1){
+        std::cout << "yeep" << std::endl;
+        if constexpr (ConfigList[CurrentIndex].status == Cfg::ACTIVE) {
+            v.push_back(std::async(std::launch::async, [](){return FeatureProcessor<CurrentIndex>().run();}));
+        }
+        return init_feature_procs<CurrentIndex-1>(v);
     }
     else {
         return 0;
@@ -149,43 +157,46 @@ inline int Processor::proc_all_feats(){
 }
 
 
+template<size_t ConfigIndex>
+inline int FeatureProcessor<ConfigIndex>::calc_feature(std::array<double, ConfigList[ConfigIndex].Nchannels> arr) {
+    if constexpr (ConfigIndex == 0) {
+        std::cout << "yeet0" << std::endl;
+        // handle this specific channel
+    }
+    if constexpr (ConfigIndex == 1) {
+        std::cout << "yeet1" << std::endl;
+        // handle this specific channel
+    }
+    if constexpr (ConfigIndex == 2) {
+        std::cout << "yeet2" << std::endl;
+        // handle this specific channel
+    }
+    return 0;
+}
+
 /** 
- * @brief Processes DataQueue at ConfigIndex
  * @tparam ConfigIndex Index of the data stream in ConfigList.
  * 
  * Processes DataQueue at ConfigIndex by popping data from Queue and providing to processor.
  * @returns 0
  */
-template<size_t ConfigIndex>
-inline int Processor::calc_feature(std::array<double, ConfigList[ConfigIndex].Nchannels> arr) {
-    if constexpr (ConfigIndex == 0) {
-        // handle this specific chanel
-    }
-    if constexpr (ConfigIndex == 1) {
-        std::cout << "yeet" << std::endl;
-        // handle this specific chanel
-    }
-    return 0;
-}
-
-
 template <size_t ConfigIndex>
-inline int Processor::proc_q() {
-    QueueMgr<ConfigIndex> q;
-    if (!q.empty()) {
-        std::array<double, ConfigList[ConfigIndex].Nchannels> arr;
-        q.pop(arr); // pop top of q and put into arr memory
-        // std::cout << "popped :";
-        for (int i = 0; i < arr.size(); i++) {
-            calc_feature<ConfigIndex>(arr);
-            // std::cout << " " << arr[i];
+inline int FeatureProcessor<ConfigIndex>::run() {
+    std::cout << "Running FeatureProcessor Index " << ConfigIndex << std::endl;
+    std::array<double, ConfigList[ConfigIndex].Nchannels> arr;
+    while(1) {
+        if (!q.empty()) {
+            q.pop(arr); // pop top of q and put into arr memory
+            std::cout << "popped :";
+            for (int i = 0; i < arr.size(); i++) {
+                std::cout << " " << arr[i];
+            }
+            calc_feature(arr);
+            std::cout << " from " << ConfigList[ConfigIndex].path  << std::endl;
         }
-        
-        // std::cout << " from " << ConfigList[ConfigIndex].path  << std::endl;
-
-    }
-    else {
-        // std::cout << "Waiting on " <<  ConfigList[ConfigIndex].path << " data" << std::endl;
+        else {
+            // std::cout << "Waiting on " <<  ConfigList[ConfigIndex].path << " data" << std::endl;
+        }
     }
 
     return 0;

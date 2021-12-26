@@ -39,9 +39,9 @@ constexpr size_t HeartBeatBufLen = 6;
  *                                                 |      PATH       |           PORT           |   fs   | Nchannels | On/off |
  *                                          =====================================================================================
  */
-constexpr std::array ConfigList {DataStreamConfig  {"/signal/chest/ACC",  "tcp://127.0.0.1:5000", chest_fs, 3,       Cfg::DISABLED},
+constexpr std::array ConfigList {DataStreamConfig  {"/signal/chest/ACC",  "tcp://127.0.0.1:5000", chest_fs, 3,       Cfg::ACTIVE},
                                  DataStreamConfig  {"/signal/chest/ECG",  "tcp://127.0.0.1:5001", chest_fs, 1,       Cfg::ACTIVE},
-                                 DataStreamConfig  {"/signal/chest/EMG",  "tcp://127.0.0.1:5002", chest_fs, 1,       Cfg::DISABLED},
+                                 DataStreamConfig  {"/signal/chest/EMG",  "tcp://127.0.0.1:5002", chest_fs, 1,       Cfg::ACTIVE},
                                  DataStreamConfig  {"/signal/chest/EDA",  "tcp://127.0.0.1:5003", chest_fs, 1,       Cfg::DISABLED},
                                  DataStreamConfig  {"/signal/chest/Temp", "tcp://127.0.0.1:5004", chest_fs, 1,       Cfg::DISABLED}, // *32 bit int
                                  DataStreamConfig  {"/signal/chest/Resp", "tcp://127.0.0.1:5005", chest_fs, 1,       Cfg::DISABLED},
