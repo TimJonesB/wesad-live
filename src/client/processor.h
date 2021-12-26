@@ -108,16 +108,13 @@ private:
     template <size_t CurrentIndex>
     int proc_all_feats();
     std::array<double, std::size(ConfigList)> state;
+    template<size_t ConfigIndex>
+    int proc_q();
+    template<size_t ConfigIndex>
+    int calc_feature(std::array<double, ConfigList[ConfigIndex].Nchannels> arr);
 };
 
 
-template <size_t ConfigIndex>
-class FeatureProcessor {
-public:
-private:
-    int proc_q<ConfigIndex>();
-    int calc_feature<ConfigIndex>();
-};
 
 /** 
  * @brief Continously calls proc_all_feats.
@@ -159,12 +156,17 @@ inline int Processor::proc_all_feats(){
  * Processes DataQueue at ConfigIndex by popping data from Queue and providing to processor.
  * @returns 0
  */
-template<size t ConfigIndex, std::enable_if<ConfigIndex == 0 || ConfigIndex == 6>>
-int FeatureProcessor<ConfigIndex>::calc_feature(std::array<couble, ConfigList1].Nchannels> arr) {
-    std::cout << "Specialized 0 || 6 one" << std::endl;
+template<size_t ConfigIndex>
+int Processor::calc_feature(std::array<double, ConfigList[ConfigIndex].Nchannels> arr) {
+    std::cout << "base" << std::endl;
     return 0;
 }
 
+template<>
+int Processor::calc_feature<1>(std::array<double, ConfigList[1].Nchannels> arr) {
+    std::cout << "specialized" << std::endl;
+    return 0;
+}
 
 template <size_t ConfigIndex>
 inline int Processor::proc_q() {
