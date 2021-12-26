@@ -31,7 +31,6 @@ constexpr size_t chest_fs = 700; /// Reference param for chest data sampling fre
 constexpr size_t data_queue_sz = 1024; /// Size of data queue
 constexpr bool test_speed = 0; /// Triggers a data transmission speed test
 constexpr bool debug_recv = 0; /// Debugs recv data in Server application
-
 constexpr size_t ProcBufLen = 6;
 constexpr size_t HeartBeatBufLen = 6;
 /** 
@@ -41,7 +40,7 @@ constexpr size_t HeartBeatBufLen = 6;
  */
 constexpr std::array ConfigList {DataStreamConfig  {"/signal/chest/ACC",  "tcp://127.0.0.1:5000", chest_fs, 3,       Cfg::ACTIVE},
                                  DataStreamConfig  {"/signal/chest/ECG",  "tcp://127.0.0.1:5001", chest_fs, 1,       Cfg::ACTIVE},
-                                 DataStreamConfig  {"/signal/chest/EMG",  "tcp://127.0.0.1:5002", chest_fs, 1,       Cfg::ACTIVE},
+                                 DataStreamConfig  {"/signal/chest/EMG",  "tcp://127.0.0.1:5002", chest_fs, 1,       Cfg::DISABLED},
                                  DataStreamConfig  {"/signal/chest/EDA",  "tcp://127.0.0.1:5003", chest_fs, 1,       Cfg::DISABLED},
                                  DataStreamConfig  {"/signal/chest/Temp", "tcp://127.0.0.1:5004", chest_fs, 1,       Cfg::DISABLED}, // *32 bit int
                                  DataStreamConfig  {"/signal/chest/Resp", "tcp://127.0.0.1:5005", chest_fs, 1,       Cfg::DISABLED},
@@ -50,4 +49,52 @@ constexpr std::array ConfigList {DataStreamConfig  {"/signal/chest/ACC",  "tcp:/
                                  DataStreamConfig  {"/signal/wrist/EDA",  "tcp://127.0.0.1:5008", 4,        1,       Cfg::DISABLED},
                                  DataStreamConfig  {"/signal/wrist/TEMP", "tcp://127.0.0.1:5009", 4,        1,       Cfg::DISABLED}};
 
+constexpr std::array FeatureList {"chestACCMean",
+                                  "chestACCStd",
+                                //"chestACC0Mean",
+                                //"chestACC0Std",
+                                //"chestACC0Freq",
+                                //"chestACC1Mean",
+                                //"chestACC1Std",
+                                //"chestACC1Freq",
+                                //"chestACC2Mean",
+                                //"chestACC2Std",
+                                //"chestACC2Freq",
+                                  "chestECGMeanHR",
+                                  "chestECGStdHR",
+                                  "chestECGMeanHRV",
+                                  "chestECGStdHRV",
+                                  // "chestECGTINN",
+                                  // "chestECGRMS",
+                                  "chestEMGMean",
+                                  "chestEMGStd",
+                                  "chestEMGFq",
+                                  "chestEDAMean",
+                                  // "chestEDAMax",
+                                  // "chestEDAMin",
+                                  // "chestEDADyn",
+                                  "chestTempMean",
+                                  // "chestTempMax",
+                                  // "chestTempMin",
+                                  // "chestTempDyn",
+                                  // "chestResp",
+                                  "wristACCMean",
+                                  "wristACCMax",
+                                  "wristACCMin",
+                                  "wristBVPMeanHR",
+                                  "wristBVPStdHR",
+                                  "wristBVPMeanHRV",
+                                  "wristBVPStdHRV",
+                                  // "wristBVPTINN",
+                                  // "wristBVPRMS",
+                                  "wristEDAMean",
+                                  // "wristEDAMax",
+                                  // "wristEDAMin",
+                                  // "wristEDADyn",
+                                  "wristTEMPMean",
+                                  // "wristTEMPMax",
+                                  // "wristTEMPMin",
+                                  // "wristTEMPDyn"
+                                  };
+constexpr size_t NumberOfFeatures = std::size(FeatureList);
 #endif // DATACONFIGH

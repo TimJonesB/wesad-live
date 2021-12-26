@@ -31,7 +31,7 @@ public:
 
     template <typename T>
     ProcBuf& insert(T val) {
-        buf(index % ProcBufLen) = val;
+        buf.row(index % ProcBufLen) = arma::rowvec(std::vector<double> (val.begin(), val.end()));
         inc_index();
         return *this;
     }
@@ -85,7 +85,10 @@ public:
         return result;
     }
 
-
+    void print() {
+        std::cout << "Index " << ConfigIndex << " buf:\n" << buf << std::endl;
+    }
+     
 private:
 
     void inc_index() {
@@ -107,16 +110,17 @@ public:
 private:
     template <size_t CurrentIndex>
     int init_feature_procs(std::vector<std::future<int>> &v);
-    std::array<double, std::size(ConfigList)> state;
+    std::array<double, NumberOfFeatures> state;
 };
 
 
 template<size_t ConfigIndex>
 class FeatureProcessor{
 public:
-    int run();
+    int run(std::array<double, NumberOfFeatures> &state);
 private:
-    int calc_feature(std::array<double, ConfigList[ConfigIndex].Nchannels> arr);
+    int calc_feature(std::array<double, ConfigList[ConfigIndex].Nchannels> arr,
+                     std::array<double, NumberOfFeatures> &state );
     ProcBuf<ConfigIndex> pbuff;
     QueueMgr<ConfigIndex> q;
 };
@@ -143,11 +147,9 @@ inline int Processor::run() {
  */
 template<size_t CurrentIndex>
 inline int Processor::init_feature_procs(std::vector<std::future<int>> &v){
-    std::cout << "current idx: " << CurrentIndex << std::endl;
     if constexpr (CurrentIndex+1){
-        std::cout << "yeep" << std::endl;
         if constexpr (ConfigList[CurrentIndex].status == Cfg::ACTIVE) {
-            v.push_back(std::async(std::launch::async, [](){return FeatureProcessor<CurrentIndex>().run();}));
+            v.push_back(std::async(std::launch::async, [this](){return FeatureProcessor<CurrentIndex>().run(this->state);}));
         }
         return init_feature_procs<CurrentIndex-1>(v);
     }
@@ -156,23 +158,67 @@ inline int Processor::init_feature_procs(std::vector<std::future<int>> &v){
     }
 }
 
+inline void print_state(std::array<double, NumberOfFeatures> &state) {
+    std::cout << "Proc State:"  << std::endl;
+    for (auto it : state) {
+        std::cout << it << ' ';
+    }
+    std::cout << std::endl;
+}
 
 template<size_t ConfigIndex>
-inline int FeatureProcessor<ConfigIndex>::calc_feature(std::array<double, ConfigList[ConfigIndex].Nchannels> arr) {
-    if constexpr (ConfigIndex == 0) {
-        std::cout << "yeet0" << std::endl;
-        // handle this specific channel
+inline int FeatureProcessor<ConfigIndex>::calc_feature(std::array<double, ConfigList[ConfigIndex].Nchannels> arr, std::array<double, NumberOfFeatures> &state) {
+    pbuff.insert(arr);
+    pbuff.print();
+
+    if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/ACC") { //Chest Acc
+        state[0] = pbuff.mean();
+        state[1] = pbuff.stddev();
+        // TODO: placeholders for x,y,z component features
     }
-    if constexpr (ConfigIndex == 1) {
-        std::cout << "yeet1" << std::endl;
-        // handle this specific channel
+    if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/ECG") { //Chest Acc
+        state[2] = pbuff.mean(); //mean hr
+        state[3] = pbuff.stddev(); //std hr
+        state[4] = pbuff.mean(); //mean hrv
+        state[5] = pbuff.stddev(); //std hrv
+        //TODO: change to actual hr, hrv
     }
-    if constexpr (ConfigIndex == 2) {
-        std::cout << "yeet2" << std::endl;
-        // handle this specific channel
+    if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/EMG") { //Chest Acc
+        is_hb = pbuff.ecg();
+        state[6] = pbuff.mean(); //mean
+        state[7] = pbuff.stddev(); //std 
+        state[8] = pbuff.dom_fq(); //fq
     }
+    if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/EDA") { //Chest Acc
+        state[9] = pbuff.mean(); //mean
+    }
+    if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/Temp") { //Chest Acc
+        state[10] = pbuff.mean(); //mean
+    }
+    if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/Resp") { //Chest Acc
+        // state[i] = pbuff.mean(); //mean
+    }
+    if constexpr (ConfigList[ConfigIndex].path == "/signal/wrist/ACC") { //Chest Acc
+        state[11] = pbuff.mean(); //mean
+        state[12] = pbuff.max(); //mean
+        state[13] = pbuff.min(); //mean
+    }
+    if constexpr (ConfigList[ConfigIndex].path == "/signal/wrist/BVP") { //Chest Acc
+        state[14] = pbuff.mean(); //mean hr
+        state[15] = pbuff.stddev(); //std hr
+        state[16] = pbuff.mean(); //mean hrv
+        state[17] = pbuff.stddev(); //std hrv
+    }
+    if constexpr (ConfigList[ConfigIndex].path == "/signal/wrist/EDA") { //Chest Acc
+        state[18] = pbuff.mean(); //mean hr
+    }
+    if constexpr (ConfigList[ConfigIndex].path == "/signal/wrist/TEMP") { //Chest Acc
+        state[19] = pbuff.mean(); //mean hr
+    }
+    print_state(state);
     return 0;
 }
+
 
 /** 
  * @tparam ConfigIndex Index of the data stream in ConfigList.
@@ -181,18 +227,18 @@ inline int FeatureProcessor<ConfigIndex>::calc_feature(std::array<double, Config
  * @returns 0
  */
 template <size_t ConfigIndex>
-inline int FeatureProcessor<ConfigIndex>::run() {
+inline int FeatureProcessor<ConfigIndex>::run(std::array<double, NumberOfFeatures> &state) {
     std::cout << "Running FeatureProcessor Index " << ConfigIndex << std::endl;
     std::array<double, ConfigList[ConfigIndex].Nchannels> arr;
     while(1) {
         if (!q.empty()) {
             q.pop(arr); // pop top of q and put into arr memory
-            std::cout << "popped :";
-            for (int i = 0; i < arr.size(); i++) {
-                std::cout << " " << arr[i];
-            }
-            calc_feature(arr);
-            std::cout << " from " << ConfigList[ConfigIndex].path  << std::endl;
+            // std::cout << "popped :";
+            // for (int i = 0; i < arr.size(); i++) {
+            //     std::cout << " " << arr[i];
+            // }
+            calc_feature(arr, state);
+            // std::cout << " from " << ConfigList[ConfigIndex].path  << std::endl;
         }
         else {
             // std::cout << "Waiting on " <<  ConfigList[ConfigIndex].path << " data" << std::endl;
