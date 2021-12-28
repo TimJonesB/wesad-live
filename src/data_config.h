@@ -41,14 +41,14 @@ constexpr size_t hr_moving_avg_window = 10;
  */
 constexpr std::array ConfigList {DataStreamConfig  {"/signal/chest/ACC",  "tcp://127.0.0.1:5000", chest_fs, 3,        5,            Cfg::ACTIVE},
                                  DataStreamConfig  {"/signal/chest/ECG",  "tcp://127.0.0.1:5001", chest_fs, 1,        5,            Cfg::ACTIVE},
-                                 DataStreamConfig  {"/signal/chest/EMG",  "tcp://127.0.0.1:5002", chest_fs, 1,        5,            Cfg::DISABLED},
-                                 DataStreamConfig  {"/signal/chest/EDA",  "tcp://127.0.0.1:5003", chest_fs, 1,        5,            Cfg::DISABLED},
+                                 DataStreamConfig  {"/signal/chest/EMG",  "tcp://127.0.0.1:5002", chest_fs, 1,        5,            Cfg::ACTIVE},
+                                 DataStreamConfig  {"/signal/chest/EDA",  "tcp://127.0.0.1:5003", chest_fs, 1,        5,            Cfg::ACTIVE},
                                  DataStreamConfig  {"/signal/chest/Temp", "tcp://127.0.0.1:5004", chest_fs, 1,        5,            Cfg::DISABLED}, // *32 bit int
-                                 DataStreamConfig  {"/signal/chest/Resp", "tcp://127.0.0.1:5005", chest_fs, 1,        5,            Cfg::DISABLED},
-                                 DataStreamConfig  {"/signal/wrist/ACC",  "tcp://127.0.0.1:5006", 32,       3,        60,           Cfg::DISABLED},
-                                 DataStreamConfig  {"/signal/wrist/BVP",  "tcp://127.0.0.1:5007", 64,       1,        60,           Cfg::DISABLED},
-                                 DataStreamConfig  {"/signal/wrist/EDA",  "tcp://127.0.0.1:5008", 4,        1,        60,           Cfg::DISABLED},
-                                 DataStreamConfig  {"/signal/wrist/TEMP", "tcp://127.0.0.1:5009", 4,        1,        60,           Cfg::DISABLED}};
+                                 DataStreamConfig  {"/signal/chest/Resp", "tcp://127.0.0.1:5005", chest_fs, 1,        5,            Cfg::ACTIVE},
+                                 DataStreamConfig  {"/signal/wrist/ACC",  "tcp://127.0.0.1:5006", 32,       3,        60,           Cfg::ACTIVE},
+                                 DataStreamConfig  {"/signal/wrist/BVP",  "tcp://127.0.0.1:5007", 64,       1,        60,           Cfg::ACTIVE},
+                                 DataStreamConfig  {"/signal/wrist/EDA",  "tcp://127.0.0.1:5008", 4,        1,        60,           Cfg::ACTIVE},
+                                 DataStreamConfig  {"/signal/wrist/TEMP", "tcp://127.0.0.1:5009", 4,        1,        60,           Cfg::ACTIVE}};
 
 constexpr std::array FeatureList {"chestACCMean",
                                   "chestACCStd",
