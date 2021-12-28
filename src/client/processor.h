@@ -20,18 +20,106 @@
  */
 
 template <size_t ConfigIndex>
+class HeartBeatBuf {
+public:
+    HeartBeatBuf() {
+        buf.zeros();
+    }
+
+    template <typename T>
+    HeartBeatBuf& insert(T val) {
+        beat_interval_steps++;
+        size_t ins_val = 0;
+        if (is_hbeat(val)) {
+            ins_val = to_ms(beat_interval_steps);
+            beat_interval_steps = 0;
+        }
+        buf(index % ConfigList[ConfigIndex].buf_size) = ins_val;
+        inc_index();
+        return *this;
+    }
+
+    ~HeartBeatBuf() = default;
+
+    double hr_mean() {
+        arma::vec hr = get_hr_vec();
+        return arma::mean(hr);
+    }
+
+    double hr_std() {
+        arma::vec hr = get_hr_vec();
+        return arma::stddev(hr);
+    }
+
+    double hrv_std() {
+        std::vector<double> intervals;
+        for (auto it : buf ) {
+            if (buf > 0) {
+                intervals.insert(it);
+            }
+        }
+        return arma::stddev(arma::vec(intervals));; // average beat intervals in ms
+    }
+
+    double hrv_mean() {
+        std::vector<double> intervals;
+        for (auto it : buf ) {
+            if (buf > 0) {
+                intervals.insert(it);
+            }
+        }
+        return arma::mean(arma::vec(intervals));; // average beat intervals in ms
+    }
+
+private:
+    void inc_index() {
+        index = (index < ConfigList[ConfigIndex].buf_size - 1) ? index + 1 : 0;
+    }
+
+    int is_hbeat(double val) {
+        auto res = ecg_det.processSample(val); 
+        if (res != -1) {
+            return 1;
+        }
+        return 0;
+    }
+
+    double to_ms (size_t beat_interval) {
+        double dt = (1/double(ConfigList[ConfigIndex].fs)); // in seconds
+        return dt * beat_interval * 1000; // in ms
+    }
+
+    arma::vec get_hr_vec () { 
+        arma::vec hr = ConfigList[ConfigIndex].fs * (60 / arma::diff (buf));
+        arma::vec mean_filt (hr_moving_avg_window, arma::fill::none);
+        mean_filt.fill(1.0 / hr_moving_avg_window);
+        arma::vec mv_avg = arma::conv(hr, mean_filt);
+        return mv_avg;
+    }
+
+    arma::vec::fixed<ConfigList[ConfigIndex].buf_size> buf;
+    DetectorPanTompkins ecg_det = DetectorPanTompkins(ConfigList[ConfigIndex].fs);
+    size_t beat_interval_steps = 0; ///Steps since last heartbeat;
+    size_t index = 0;
+};    
+
+
+template <size_t ConfigIndex>
 class ProcBuf {
 public:
     ProcBuf() {
         buf.zeros();
-        hrbuf.zeros();
     }
 
     ~ProcBuf() = default;
 
     template <typename T>
     ProcBuf& insert(T val) {
-        buf.row(index % ProcBufLen) = arma::rowvec(std::vector<double> (val.begin(), val.end()));
+        buf.row(index % ConfigList[ConfigIndex].buf_size) = arma::rowvec(std::vector<double> (val.begin(), 
+                                                                                              val.end()));
+        if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/ECG") {
+            hb_buf.insert(val[0]);
+        }
         inc_index();
         return *this;
     }
@@ -61,17 +149,20 @@ public:
         return arma::range(buf);
     }
 
-    int ecg(double val) {
-        int fs = 700;
-        auto res = ecg_det.processSample(val); 
-        if (res != -1) {
-            return 1;
-        }
-        return 0;
+    auto hr_mean() {
+        return hb_buf.hr_mean();
     }
 
-    int hr() {
-        return 0;     
+    auto hr_std() {
+        return hb_buf.hr_std();
+    }
+
+    auto hvr_mean() {
+        return hb_buf.hrv_mean();
+    }
+
+    auto hvr_std() {
+        return hb_buf.hrv_std();
     }
 
     auto dom_fq(size_t fs) {
@@ -80,7 +171,7 @@ public:
         arma::vec f_fft = arma::linspace(0, fs, buf.size());
         arma::vec f_fft1 = f_fft(arma::span(0, (buf.size()/2)));
         auto fft_sort = arma::sort_index(fft_res_1side, "descend");
-        arma::vec  fq_ranked = f_fft1(fft_sort);
+        arma::vec fq_ranked = f_fft1(fft_sort);
         double result = fq_ranked(0) != 0 ? fq_ranked(0) : fq_ranked(1);
         return result;
     }
@@ -88,21 +179,23 @@ public:
     void print() {
         std::cout << "Index " << ConfigIndex << " buf:\n" << buf << std::endl;
     }
+
+    arma::vec col(size_t index) {
+        return buf.col(index);
+    }
      
 private:
 
     void inc_index() {
-        index = (index < ProcBufLen - 1) ? index + 1 : 0;
+        index = (index < ConfigList[ConfigIndex].buf_size - 1) ? index + 1 : 0;
     }
-
-    arma::mat::fixed<ProcBufLen, ConfigList[ConfigIndex].Nchannels> buf;
-    arma::vec::fixed<HeartBeatBufLen> hrbuf;
-    size_t hr_interval = 0;
-
-    DetectorPanTompkins ecg_det = DetectorPanTompkins(700);
-    int index = 0;
-
+    arma::mat::fixed<ConfigList[ConfigIndex].buf_size, 
+                     ConfigList[ConfigIndex].Nchannels> buf; /// Holds moving-window data for all statistical measurements
+    HeartBeatBuf<ConfigIndex> hb_buf;
+    size_t index = 0;
 };
+
+
 
 class Processor {
 public:
@@ -119,10 +212,10 @@ class FeatureProcessor{
 public:
     int run(std::array<double, NumberOfFeatures> &state);
 private:
+    QueueMgr<ConfigIndex> q; /// Gets the data
+    ProcBuf<ConfigIndex> pbuff; /// Stores the data for processing
     int calc_feature(std::array<double, ConfigList[ConfigIndex].Nchannels> arr,
-                     std::array<double, NumberOfFeatures> &state );
-    ProcBuf<ConfigIndex> pbuff;
-    QueueMgr<ConfigIndex> q;
+                     std::array<double, NumberOfFeatures> &state ); /// Processes the data
 };
 
 /** 
@@ -167,14 +260,25 @@ inline void print_state(std::array<double, NumberOfFeatures> &state) {
 }
 
 template<size_t ConfigIndex>
-inline int FeatureProcessor<ConfigIndex>::calc_feature(std::array<double, ConfigList[ConfigIndex].Nchannels> arr, std::array<double, NumberOfFeatures> &state) {
+inline int FeatureProcessor<ConfigIndex>::calc_feature(std::array<double, ConfigList[ConfigIndex].Nchannels> arr, 
+                                                       std::array<double, NumberOfFeatures> &state) {
     pbuff.insert(arr);
     pbuff.print();
 
     if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/ACC") { //Chest Acc
-        state[0] = pbuff.mean();
-        state[1] = pbuff.stddev();
-        // TODO: placeholders for x,y,z component features
+        arma::vec x = pbuff.col(0);
+        arma::vec y = pbuff.col(1);
+        arma::vec z = pbuff.col(2);
+        double xmean = arma::mean(x);
+        double ymean = arma::mean(y);
+        double zmean = arma::mean(z);
+        double xstd = arma::stddev(x);
+        double ystd = arma::stddev(y);
+        double zstd = arma::stddev(z);
+        double acc_mean = xmean + ymean + zmean;
+        double acc_std = xstd + ystd + zstd;
+        state[0] = acc_mean;
+        state[1] = acc_std;
     }
     if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/ECG") { //Chest Acc
         state[2] = pbuff.mean(); //mean hr
@@ -184,7 +288,7 @@ inline int FeatureProcessor<ConfigIndex>::calc_feature(std::array<double, Config
         //TODO: change to actual hr, hrv
     }
     if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/EMG") { //Chest Acc
-        is_hb = pbuff.ecg();
+        // is_hb = pbuff.ecg();
         state[6] = pbuff.mean(); //mean
         state[7] = pbuff.stddev(); //std 
         state[8] = pbuff.dom_fq(); //fq
@@ -199,9 +303,29 @@ inline int FeatureProcessor<ConfigIndex>::calc_feature(std::array<double, Config
         // state[i] = pbuff.mean(); //mean
     }
     if constexpr (ConfigList[ConfigIndex].path == "/signal/wrist/ACC") { //Chest Acc
-        state[11] = pbuff.mean(); //mean
-        state[12] = pbuff.max(); //mean
-        state[13] = pbuff.min(); //mean
+        arma::vec x = pbuff.col(0);
+        arma::vec y = pbuff.col(1);
+        arma::vec z = pbuff.col(2);
+        double xmean = arma::mean(x);
+        double ymean = arma::mean(y);
+        double zmean = arma::mean(z);
+        double xstd = arma::stddev(x);
+        double ystd = arma::stddev(y);
+        double zstd = arma::stddev(z);
+        double xmax = arma::max(x);
+        double ymax = arma::max(y);
+        double zmax = arma::max(z);
+        double xmin = arma::min(x);
+        double ymin = arma::min(y);
+        double zmin = arma::min(z);
+        double acc_mean = xmean + ymean + zmean;
+        double std_mean = xstd + ystd + zstd;
+        double acc_min  = xmean + ymean + zmean;
+        double acc_std = xstd + ystd + zstd;
+        state[11] = xmean;
+        state[12] = xmax;
+        state[13] = xmin;
+
     }
     if constexpr (ConfigList[ConfigIndex].path == "/signal/wrist/BVP") { //Chest Acc
         state[14] = pbuff.mean(); //mean hr
