@@ -21,8 +21,8 @@
 
 inline void print_state(std::array<double, NumberOfFeatures> &state) {
     std::cout << "Proc State:"  << std::endl;
-    for (auto it : state) {
-        std::cout << it << ' ';
+    for (size_t i = 0; i < NumberOfFeatures; i++) {
+        std::cout << i << ": " << state[i] << std::endl;
     }
     std::cout << std::endl;
 }
@@ -39,7 +39,7 @@ public:
         beat_interval_steps++;
         size_t ins_val = 0;
         if (is_hbeat(val)) {
-            ins_val = to_ms(beat_interval_steps);
+            ins_val = beat_interval_steps;
             beat_interval_steps = 0;
         }
         buf(index % ConfigList[ConfigIndex].buf_size) = ins_val;
@@ -232,6 +232,8 @@ template<size_t ConfigIndex>
 class FeatureProcessor{
 public:
     int run(std::array<double, NumberOfFeatures> &state);
+    int process(std::array<double, ConfigList[ConfigIndex].Nchannels> arr, 
+                std::array<double, NumberOfFeatures> &state);
 private:
     QueueMgr<ConfigIndex> q; /// Gets the data
     ProcBuf<ConfigIndex> pbuff; /// Stores the data for processing
@@ -249,7 +251,7 @@ inline int Processor::run() {
     std::vector<std::future<int>> v;
     init_feature_procs<std::size(ConfigList)-1>(v);
     while(1) {
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::this_thread::sleep_for(std::chrono::milliseconds(print_state_delay_ms));
         print_state(state);
     }
     return 0;
@@ -276,13 +278,15 @@ inline int Processor::init_feature_procs(std::vector<std::future<int>> &v){
     }
 }
 
+template<size_t ConfigIndex>
+inline int FeatureProcessor<ConfigIndex>::process(std::array<double, ConfigList[ConfigIndex].Nchannels> arr, std::array<double, NumberOfFeatures> &state) {
+    pbuff.insert(arr);
+    calc_feature(arr, state);
+    return 0;
+}
 
 template<size_t ConfigIndex>
-inline int FeatureProcessor<ConfigIndex>::calc_feature(std::array<double, ConfigList[ConfigIndex].Nchannels> arr, 
-                                                       std::array<double, NumberOfFeatures> &state) {
-    pbuff.insert(arr);
-    // pbuff.print();
-
+inline int FeatureProcessor<ConfigIndex>::calc_feature(std::array<double, ConfigList[ConfigIndex].Nchannels> arr, std::array<double, NumberOfFeatures> &state) {
     if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/ACC") { //Chest Acc
         arma::vec x = pbuff.col(0);
         arma::vec y = pbuff.col(1);
@@ -299,12 +303,10 @@ inline int FeatureProcessor<ConfigIndex>::calc_feature(std::array<double, Config
         state[1] = acc_std;
     }
     if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/ECG") { //Chest Acc
-
         state[2] = pbuff.hr_mean(); //mean hr
         state[3] = pbuff.hr_std(); //std hr
         state[4] = pbuff.hrv_mean(); //mean hrv
         state[5] = pbuff.hrv_std(); //std hrv
-        //TODO: change to actual hr, hrv
     }
     if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/EMG") { //Chest Acc
         // is_hb = pbuff.ecg();
@@ -379,7 +381,7 @@ inline int FeatureProcessor<ConfigIndex>::run(std::array<double, NumberOfFeature
             // for (int i = 0; i < arr.size(); i++) {
             //     std::cout << " " << arr[i];
             // }
-            calc_feature(arr, state);
+            process(arr, state);
             // std::cout << " from " << ConfigList[ConfigIndex].path  << std::endl;
         }
         else {
@@ -389,16 +391,6 @@ inline int FeatureProcessor<ConfigIndex>::run(std::array<double, NumberOfFeature
 
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
 
 
 #endif //PROCESSORH

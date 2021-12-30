@@ -1,4 +1,8 @@
-add_executable(client
+
+add_library(client INTERFACE
+            )
+
+add_executable(client-bin
                run_client.cpp
                )
 
@@ -8,17 +12,36 @@ find_package(Boost REQUIRED)
 find_package(Armadillo REQUIRED)
 
 add_subdirectory(Cpp_Ecg_Detectors)
-target_include_directories(client PUBLIC
+
+target_include_directories(client INTERFACE
                            ${CMAKE_CURRENT_SOURCE_DIR}
                            ${CMAKE_CURRENT_SOURCE_DIR}/..
-                           Cpp_Ecg_Detectors
                            ${PROJECT_BINARY_DIR}
                            ${HDF5_INCLUDE_DIRS}
                            ${Boost_INCLUDE_DIRS}
                            ${ARMADILLO_INCLUDE_DIRS}
+                           Cpp_Ecg_Detectors
                           )
 
-target_link_libraries (client
+target_link_libraries (client INTERFACE
+                       ${HDF5_C_LIBRARIES}
+                       cppzmq
+                       ${Boost_LIBRARY_DIRS}
+                       ${ARMADILLO_LIBRARIES}
+                       Cpp_Ecg_Detectors
+                      )
+
+target_include_directories(client-bin PUBLIC 
+                           ${CMAKE_CURRENT_SOURCE_DIR}
+                           ${CMAKE_CURRENT_SOURCE_DIR}/..
+                           ${PROJECT_BINARY_DIR}
+                           ${HDF5_INCLUDE_DIRS}
+                           ${Boost_INCLUDE_DIRS}
+                           ${ARMADILLO_INCLUDE_DIRS}
+                           Cpp_Ecg_Detectors
+                          )
+
+target_link_libraries (client-bin
                        ${HDF5_C_LIBRARIES}
                        cppzmq
                        ${Boost_LIBRARY_DIRS}

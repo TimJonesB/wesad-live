@@ -14,10 +14,10 @@
  */
 int main() {
     std::future<int> f1 = std::async(std::launch::async,
-                                     [](){return system("./src/server/server");});
+                                     [](){return system("./src/server/server-bin");});
 
     std::future<int> f2 = std::async(std::launch::async,
-                                     [](){return system("./src/client/client");});
+                                     [](){return system("./src/client/client-bin");});
 
     return 0;
 }

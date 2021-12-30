@@ -17,7 +17,7 @@ add_library(Cpp_Ecg_Detectors SHARED
 )
 set(CMAKE_CXX_STANDARD 14)
 
-target_include_directories(Cpp_Ecg_Detectors INTERFACE
+target_include_directories(Cpp_Ecg_Detectors PUBLIC
                            handlers
                            iir1
                            realtime)
