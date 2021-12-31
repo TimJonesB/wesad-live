@@ -57,12 +57,18 @@ public:
 
     double hrv_std() {
         arma::vec intervals (get_beat_intervals());
+        for (size_t i = 0; i < intervals.size(); i ++) {
+            intervals(i) = to_ms(intervals(i));
+        }
         double std = intervals.empty() ? 0.0 : arma::stddev(intervals);
         return std;
     }
 
     double hrv_mean() {
         arma::vec intervals(get_beat_intervals());
+        for (size_t i = 0; i < intervals.size(); i ++) {
+            intervals(i) = to_ms(intervals(i));
+        }
         double mean = intervals.empty() ? 0.0 : arma::mean(intervals);
         return mean;
     }
@@ -125,9 +131,9 @@ public:
     ProcBuf& insert(T val) {
         buf.row(index % ConfigList[ConfigIndex].buf_size) = arma::rowvec(std::vector<double> (val.begin(), 
                                                                                               val.end()));
-        // if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/ECG") {
+        if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/ECG" || ConfigList[ConfigIndex].path == "/signal/wrist/BVP") {
             hb_buf.insert(val[0]);
-        // }
+        }
         inc_index();
         return *this;
     }
@@ -239,8 +245,10 @@ inline int Processor::run() {
     std::vector<std::future<int>> v;
     init_feature_procs<std::size(ConfigList)-1>(v);
     while(1) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(print_state_delay_ms));
-        print_state(state);
+        if (print_state_bool) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(print_state_delay_ms));
+            print_state(state);
+        }
     }
     return 0;
 }
@@ -306,10 +314,8 @@ inline int FeatureProcessor<ConfigIndex>::calc_feature(std::array<double, Config
         state[9] = pbuff.mean(); //mean
     }
     if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/Temp") { //Chest Acc
-        state[10] = pbuff.mean(); //mean
     }
     if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/Resp") { //Chest Acc
-        // state[i] = pbuff.mean(); //mean
     }
     if constexpr (ConfigList[ConfigIndex].path == "/signal/wrist/ACC") { //Chest Acc
         arma::vec x = pbuff.col(0);
@@ -331,22 +337,22 @@ inline int FeatureProcessor<ConfigIndex>::calc_feature(std::array<double, Config
         double std_mean = xstd + ystd + zstd;
         double acc_min  = xmean + ymean + zmean;
         double acc_std = xstd + ystd + zstd;
-        state[11] = xmean;
-        state[12] = xmax;
-        state[13] = xmin;
+        state[10] = xmean;
+        state[11] = xmax;
+        state[12] = xmin;
 
     }
     if constexpr (ConfigList[ConfigIndex].path == "/signal/wrist/BVP") { //Chest Acc
-        state[14] = pbuff.hr_mean(); //mean hr
-        state[15] = pbuff.hr_std(); //std hr
-        state[16] = pbuff.hrv_mean(); //mean hrv
-        state[17] = pbuff.hrv_std(); //std hrv
+        state[13] = pbuff.hr_mean(); //mean hr
+        state[14] = pbuff.hr_std(); //std hr
+        state[15] = pbuff.hrv_mean(); //mean hrv
+        state[16] = pbuff.hrv_std(); //std hrv
     }
     if constexpr (ConfigList[ConfigIndex].path == "/signal/wrist/EDA") { //Chest Acc
-        state[18] = pbuff.mean(); //mean hr
+        state[17] = pbuff.mean(); //mean hr
     }
     if constexpr (ConfigList[ConfigIndex].path == "/signal/wrist/TEMP") { //Chest Acc
-        state[19] = pbuff.mean(); //mean hr
+        state[18] = pbuff.mean(); //mean hr
     }
     return 0;
 }

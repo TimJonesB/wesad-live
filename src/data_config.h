@@ -34,24 +34,25 @@ constexpr size_t data_queue_sz = 1024; /// Size of data queue
 constexpr bool test_speed = 0; /// Triggers a data transmission speed test
 constexpr bool debug_recv = 0; /// Debugs recv data in Server application
 constexpr size_t hr_moving_avg_window = 3;
-constexpr size_t print_state_delay_ms = 1000;
+constexpr bool print_state_bool = 1; 
+constexpr size_t print_state_delay_ms = 250;
 /** 
  * @brief  List of DataStreamConfigs.
  *                                                 |      PATH       |           PORT           |   fs   | Nchannels | Lookback (s) | On/off |
  *                                          =====================================================================================
  */
-constexpr std::array ConfigList {DataStreamConfig  {"/signal/chest/ACC",  "tcp://127.0.0.1:5000", chest_fs, 3,        5,            Cfg::DISABLED},
+constexpr std::array ConfigList {DataStreamConfig  {"/signal/chest/ACC",  "tcp://127.0.0.1:5000", chest_fs, 3,        5,            Cfg::ACTIVE},
                                  DataStreamConfig  {"/signal/chest/ECG",  "tcp://127.0.0.1:5001", chest_fs, 1,        5,            Cfg::ACTIVE},
-                                 DataStreamConfig  {"/signal/chest/EMG",  "tcp://127.0.0.1:5002", chest_fs, 1,        5,            Cfg::DISABLED},
-                                 DataStreamConfig  {"/signal/chest/EDA",  "tcp://127.0.0.1:5003", chest_fs, 1,        5,            Cfg::DISABLED},
+                                 DataStreamConfig  {"/signal/chest/EMG",  "tcp://127.0.0.1:5002", chest_fs, 1,        5,            Cfg::ACTIVE},
+                                 DataStreamConfig  {"/signal/chest/EDA",  "tcp://127.0.0.1:5003", chest_fs, 1,        5,            Cfg::ACTIVE},
                                  DataStreamConfig  {"/signal/chest/Temp", "tcp://127.0.0.1:5004", chest_fs, 1,        5,            Cfg::DISABLED}, // *32 bit int
-                                 DataStreamConfig  {"/signal/chest/Resp", "tcp://127.0.0.1:5005", chest_fs, 1,        5,            Cfg::DISABLED},
-                                 DataStreamConfig  {"/signal/wrist/ACC",  "tcp://127.0.0.1:5006", 32,       3,        60,           Cfg::DISABLED},
-                                 DataStreamConfig  {"/signal/wrist/BVP",  "tcp://127.0.0.1:5007", 64,       1,        60,           Cfg::DISABLED},
-                                 DataStreamConfig  {"/signal/wrist/EDA",  "tcp://127.0.0.1:5008", 4,        1,        60,           Cfg::DISABLED},
-                                 DataStreamConfig  {"/signal/wrist/TEMP", "tcp://127.0.0.1:5009", 4,        1,        60,           Cfg::DISABLED}};
-
-constexpr std::array FeatureList {"chestACCMean",
+                                 DataStreamConfig  {"/signal/chest/Resp", "tcp://127.0.0.1:5005", chest_fs, 1,        5,            Cfg::ACTIVE},
+                                 DataStreamConfig  {"/signal/wrist/ACC",  "tcp://127.0.0.1:5006", 32,       3,        60,           Cfg::ACTIVE},
+                                 DataStreamConfig  {"/signal/wrist/BVP",  "tcp://127.0.0.1:5007", 64,       1,        60,           Cfg::ACTIVE},
+                                 DataStreamConfig  {"/signal/wrist/EDA",  "tcp://127.0.0.1:5008", 4,        1,        60,           Cfg::ACTIVE},
+                                 DataStreamConfig  {"/signal/wrist/TEMP", "tcp://127.0.0.1:5009", 4,        1,        60,           Cfg::ACTIVE}};
+                                                                                                                                     
+constexpr std::array FeatureList {"chestACCMean",                                                                                    
                                   "chestACCStd",
                                 //"chestACC0Mean",
                                 //"chestACC0Std",
@@ -75,7 +76,7 @@ constexpr std::array FeatureList {"chestACCMean",
                                   // "chestEDAMax",
                                   // "chestEDAMin",
                                   // "chestEDADyn",
-                                  "chestTempMean",
+                                  // "chestTempMean",
                                   // "chestTempMax",
                                   // "chestTempMin",
                                   // "chestTempDyn",
