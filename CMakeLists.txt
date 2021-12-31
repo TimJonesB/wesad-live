@@ -6,8 +6,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_executable(WesadLive 
-            #    src/demo.cpp
-               src/test_run.cpp
+               src/demo.cpp
+            #    src/test_run.cpp
 )
 
 add_subdirectory(src/server)

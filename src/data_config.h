@@ -33,7 +33,7 @@ constexpr size_t chest_fs = 700; /// Reference param for chest data sampling fre
 constexpr size_t data_queue_sz = 1024; /// Size of data queue
 constexpr bool test_speed = 0; /// Triggers a data transmission speed test
 constexpr bool debug_recv = 0; /// Debugs recv data in Server application
-constexpr size_t hr_moving_avg_window = 10;
+constexpr size_t hr_moving_avg_window = 3;
 constexpr size_t print_state_delay_ms = 1000;
 /** 
  * @brief  List of DataStreamConfigs.

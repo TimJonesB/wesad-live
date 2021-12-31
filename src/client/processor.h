@@ -7,6 +7,7 @@
 #include <array>
 
 #include <armadillo>
+#include <boost/circular_buffer.hpp>
 
 #include "client.h"
 #include "data_config.h"
@@ -30,9 +31,6 @@ inline void print_state(std::array<double, NumberOfFeatures> &state) {
 template <size_t ConfigIndex>
 class HeartBeatBuf {
 public:
-    HeartBeatBuf() {
-        buf.zeros();
-    }
 
     template <typename T>
     HeartBeatBuf& insert(T val) {
@@ -42,59 +40,34 @@ public:
             ins_val = beat_interval_steps;
             beat_interval_steps = 0;
         }
-        buf(index % ConfigList[ConfigIndex].buf_size) = ins_val;
-        inc_index();
+        buf.push_back(ins_val);
         return *this;
     }
 
-    ~HeartBeatBuf() = default;
 
     double hr_mean() {
         arma::vec hr = get_hr_vec();
-        if (hr.size() < 2) {
-            return 0;
-        }
         return arma::mean(hr);
     }
 
     double hr_std() {
         arma::vec hr = get_hr_vec();
-        if (hr.size() < 2) {
-            return 0;
-        }
         return arma::stddev(hr);
     }
 
     double hrv_std() {
-        std::vector<double> intervals;
-        for (auto it : buf ) {
-            if (it > 0.0) {
-                intervals.push_back(it);
-            }
-        }
-        if (intervals.size() < 2) {
-            return 0;
-        }
-        return arma::stddev(arma::vec(intervals));; // average beat intervals in ms
+        arma::vec intervals (get_beat_intervals());
+        double std = intervals.empty() ? 0.0 : arma::stddev(intervals);
+        return std;
     }
 
     double hrv_mean() {
-        std::vector<double> intervals;
-        for (auto it : buf ) {
-            if (it > 0.0) {
-                intervals.push_back(it);
-            }
-        }
-        if (intervals.size() < 2) {
-            return 0;
-        }
-        return arma::mean(arma::vec(intervals));; // average beat intervals in ms
+        arma::vec intervals(get_beat_intervals());
+        double mean = intervals.empty() ? 0.0 : arma::mean(intervals);
+        return mean;
     }
 
 private:
-    void inc_index() {
-        index = (index < ConfigList[ConfigIndex].buf_size - 1) ? index + 1 : 0;
-    }
 
     int is_hbeat(double val) {
         auto res = ecg_det.processSample(val); 
@@ -105,19 +78,34 @@ private:
     }
 
     double to_ms (size_t beat_interval) {
-        double dt = (1/double(ConfigList[ConfigIndex].fs)); // in seconds
-        return dt * beat_interval * 1000; // in ms
+        double dt = (1/double(ConfigList[ConfigIndex].fs)); // seconds
+        return dt * beat_interval * 1000; // ms
+    }
+
+    std::vector<double> get_beat_intervals() {
+        std::vector<double> intervals;
+        for (auto it : buf ) {
+            if (it > 0) {
+                intervals.push_back(it);
+            }
+        }
+        return intervals; // average beat intervals in ms
     }
 
     arma::vec get_hr_vec () { 
-        arma::vec hr = ConfigList[ConfigIndex].fs * (60 / arma::diff (buf));
+        std::vector<double> intervals = get_beat_intervals(); 
+        if (intervals.size() < 2) {
+            return arma::vec({0});
+        }
+        arma::vec ints(intervals);
+        arma::vec hr = ConfigList[ConfigIndex].fs * (60 / (ints));
         arma::vec mean_filt (hr_moving_avg_window, arma::fill::none);
         mean_filt.fill(1.0 / hr_moving_avg_window);
         arma::vec mv_avg = arma::conv(hr, mean_filt);
         return mv_avg;
     }
 
-    arma::vec::fixed<ConfigList[ConfigIndex].buf_size> buf;
+    boost::circular_buffer<size_t> buf{ConfigList[ConfigIndex].buf_size};
     DetectorPanTompkins ecg_det = DetectorPanTompkins(ConfigList[ConfigIndex].fs);
     size_t beat_interval_steps = 0; ///Steps since last heartbeat;
     size_t index = 0;
