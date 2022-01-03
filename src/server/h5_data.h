@@ -8,7 +8,7 @@
 #include "hdf5.h"
 #include "data_config.h"
 
-const bool debug_bool = 1;
+const bool debug_bool = 0;
 
 /** 
  * @brief Manages read operations from HDF5 data source file.
@@ -137,8 +137,6 @@ inline int H5Data<ConfigIndex>::read_chunk(const std::string &path, const size_t
     hid_t dataspace = H5Dget_space(dataset);
 
     const int rank = H5Sget_simple_extent_ndims(dataspace);
-    std::cout << "rank debug: " << rank << std::endl;
-    // assert(rank == 2);
 
     hsize_t dims[rank];
     hsize_t maxdims[rank];

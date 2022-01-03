@@ -45,7 +45,7 @@ inline Server<ConfigIndex>::Server(zmq::context_t &ctx) :
 template <size_t ConfigIndex>
 inline int Server<ConfigIndex>::run() {
 
-    std::cout << "Running " << ConfigList[ConfigIndex].path << std::endl;
+    // std::cout << "Running " << ConfigList[ConfigIndex].path << std::endl;
     int dt_us = int(1e6/ConfigList[ConfigIndex].fs);
     double data_buf[nsteps][ConfigList[ConfigIndex].Nchannels];
     int status = this->data.read_chunk(std::string(ConfigList[ConfigIndex].path), 0, nsteps-1, data_buf);

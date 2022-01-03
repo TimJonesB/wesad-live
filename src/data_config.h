@@ -23,8 +23,10 @@ struct DataStreamConfig {
     size_t lookback_s; /// number of timesteps in the rolling window calculations in processor
     size_t buf_size;
     Cfg status; // stream on (Cfg::ACTIVE) or off(Cfg::DISABLED)
-    constexpr DataStreamConfig(const std::string_view path, const std::string_view port, const size_t fs, const size_t Nchannels, const size_t lookback_s, Cfg status) :
-                               path {path}, port {port}, fs {fs}, Nchannels{Nchannels}, lookback_s{lookback_s}, buf_size{fs*lookback_s}, status{status} {}
+    constexpr DataStreamConfig(const std::string_view path, const std::string_view port, const size_t fs,
+                               const size_t Nchannels, const size_t lookback_s, Cfg status) :
+                                   path {path}, port {port}, fs {fs}, 
+                                   Nchannels{Nchannels}, lookback_s{lookback_s}, buf_size{fs*lookback_s}, status{status} {}
 };
 
 
@@ -47,10 +49,10 @@ constexpr std::array ConfigList {DataStreamConfig  {"/signal/chest/ACC",  "tcp:/
                                  DataStreamConfig  {"/signal/chest/EDA",  "tcp://127.0.0.1:5003", chest_fs, 1,        5,            Cfg::ACTIVE},
                                  DataStreamConfig  {"/signal/chest/Temp", "tcp://127.0.0.1:5004", chest_fs, 1,        5,            Cfg::DISABLED}, // *32 bit int
                                  DataStreamConfig  {"/signal/chest/Resp", "tcp://127.0.0.1:5005", chest_fs, 1,        5,            Cfg::ACTIVE},
-                                 DataStreamConfig  {"/signal/wrist/ACC",  "tcp://127.0.0.1:5006", 32,       3,        60,           Cfg::ACTIVE},
-                                 DataStreamConfig  {"/signal/wrist/BVP",  "tcp://127.0.0.1:5007", 64,       1,        60,           Cfg::ACTIVE},
-                                 DataStreamConfig  {"/signal/wrist/EDA",  "tcp://127.0.0.1:5008", 4,        1,        60,           Cfg::ACTIVE},
-                                 DataStreamConfig  {"/signal/wrist/TEMP", "tcp://127.0.0.1:5009", 4,        1,        60,           Cfg::ACTIVE}};
+                                 DataStreamConfig  {"/signal/wrist/ACC",  "tcp://127.0.0.1:5006", 32,       3,        15,           Cfg::ACTIVE},
+                                 DataStreamConfig  {"/signal/wrist/BVP",  "tcp://127.0.0.1:5007", 64,       1,        15,           Cfg::ACTIVE},
+                                 DataStreamConfig  {"/signal/wrist/EDA",  "tcp://127.0.0.1:5008", 4,        1,        15,           Cfg::ACTIVE},
+                                 DataStreamConfig  {"/signal/wrist/TEMP", "tcp://127.0.0.1:5009", 4,        1,        15,           Cfg::ACTIVE}};
                                                                                                                                      
 constexpr std::array FeatureList {"chestACCMean",                                                                                    
                                   "chestACCStd",
@@ -64,9 +66,9 @@ constexpr std::array FeatureList {"chestACCMean",
                                 //"chestACC2Std",
                                 //"chestACC2Freq",
                                   "chestECGMeanHR",
-                                  "chestECGStdHR",
+                                  // "chestECGStdHR",
                                   "chestECGMeanHRV",
-                                  "chestECGStdHRV",
+                                  // "chestECGStdHRV",
                                   // "chestECGTINN",
                                   // "chestECGRMS",
                                   "chestEMGMean",
@@ -82,12 +84,12 @@ constexpr std::array FeatureList {"chestACCMean",
                                   // "chestTempDyn",
                                   // "chestResp",
                                   "wristACCMean",
-                                  "wristACCMax",
-                                  "wristACCMin",
+                                  // "wristACCMax",
+                                  // "wristACCMin",
                                   "wristBVPMeanHR",
-                                  "wristBVPStdHR",
+                                  // "wristBVPStdHR",
                                   "wristBVPMeanHRV",
-                                  "wristBVPStdHRV",
+                                  // "wristBVPStdHRV",
                                   // "wristBVPTINN",
                                   // "wristBVPRMS",
                                   "wristEDAMean",

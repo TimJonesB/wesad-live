@@ -5,6 +5,7 @@
 #include <vector>
 #include <map>
 #include <array>
+#include <memory>
 
 #include <armadillo>
 #include <boost/circular_buffer.hpp>
@@ -28,6 +29,7 @@ inline void print_state(std::array<double, NumberOfFeatures> &state) {
     std::cout << std::endl;
 }
 
+
 template <size_t ConfigIndex>
 class HeartBeatBuf {
 public:
@@ -43,7 +45,6 @@ public:
         buf.push_back(ins_val);
         return *this;
     }
-
 
     double hr_mean() {
         arma::vec hr = get_hr_vec();
@@ -123,6 +124,13 @@ class ProcBuf {
 public:
     ProcBuf() {
         buf.zeros();
+        if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/ECG" ||
+                      ConfigList[ConfigIndex].path == "/signal/wrist/BVP") {
+            hb_buf = std::make_unique<HeartBeatBuf<ConfigIndex>>(); 
+        }
+        else {
+            hb_buf = nullptr;
+        }
     }
 
     ~ProcBuf() = default;
@@ -131,8 +139,9 @@ public:
     ProcBuf& insert(T val) {
         buf.row(index % ConfigList[ConfigIndex].buf_size) = arma::rowvec(std::vector<double> (val.begin(), 
                                                                                               val.end()));
-        if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/ECG" || ConfigList[ConfigIndex].path == "/signal/wrist/BVP") {
-            hb_buf.insert(val[0]);
+        if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/ECG" ||
+                      ConfigList[ConfigIndex].path == "/signal/wrist/BVP") {
+            hb_buf->insert(val[0]);
         }
         inc_index();
         return *this;
@@ -144,7 +153,6 @@ public:
     }
 
     auto mean() { 
-
         return arma::mean(buf);
     }
 
@@ -165,19 +173,19 @@ public:
     }
 
     auto hr_mean() {
-        return hb_buf.hr_mean();
+        return hb_buf->hr_mean();
     }
 
     auto hr_std() {
-        return hb_buf.hr_std();
+        return hb_buf->hr_std();
     }
 
     auto hrv_mean() {
-        return hb_buf.hrv_mean();
+        return hb_buf->hrv_mean();
     }
 
     auto hrv_std() {
-        return hb_buf.hrv_std();
+        return hb_buf->hrv_std();
     }
 
     auto dom_fq() {
@@ -206,7 +214,7 @@ private:
     }
     arma::mat::fixed<ConfigList[ConfigIndex].buf_size, 
                      ConfigList[ConfigIndex].Nchannels> buf; /// Holds moving-window data for all statistical measurements
-    HeartBeatBuf<ConfigIndex> hb_buf;
+    std::unique_ptr<HeartBeatBuf<ConfigIndex>> hb_buf; 
     size_t index = 0;
 };
 
@@ -242,6 +250,7 @@ private:
  * @returns Runs indefinitely
  */
 inline int Processor::run() {
+    std::cout << "Config sz = " << std::size(ConfigList) << std::endl;
     std::vector<std::future<int>> v;
     init_feature_procs<std::size(ConfigList)-1>(v);
     while(1) {
@@ -265,6 +274,7 @@ template<size_t CurrentIndex>
 inline int Processor::init_feature_procs(std::vector<std::future<int>> &v){
     if constexpr (CurrentIndex+1){
         if constexpr (ConfigList[CurrentIndex].status == Cfg::ACTIVE) {
+            std:: cout << "Initializing number " << CurrentIndex << std::endl;
             v.push_back(std::async(std::launch::async, [this](){return FeatureProcessor<CurrentIndex>().run(this->state);}));
         }
         return init_feature_procs<CurrentIndex-1>(v);
@@ -283,7 +293,7 @@ inline int FeatureProcessor<ConfigIndex>::process(std::array<double, ConfigList[
 
 template<size_t ConfigIndex>
 inline int FeatureProcessor<ConfigIndex>::calc_feature(std::array<double, ConfigList[ConfigIndex].Nchannels> arr, std::array<double, NumberOfFeatures> &state) {
-    if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/ACC") { //Chest Acc
+    if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/ACC") { 
         arma::vec x = pbuff.col(0);
         arma::vec y = pbuff.col(1);
         arma::vec z = pbuff.col(2);
@@ -298,26 +308,26 @@ inline int FeatureProcessor<ConfigIndex>::calc_feature(std::array<double, Config
         state[0] = acc_mean;
         state[1] = acc_std;
     }
-    if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/ECG") { //Chest Acc
+    if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/ECG") {
         state[2] = pbuff.hr_mean(); //mean hr
-        state[3] = pbuff.hr_std(); //std hr
-        state[4] = pbuff.hrv_mean(); //mean hrv
-        state[5] = pbuff.hrv_std(); //std hrv
+        // state[3] = pbuff.hr_std(); //std hr
+        state[3] = pbuff.hrv_mean(); //mean hrv
+        // state[5] = pbuff.hrv_std(); //std hrv
     }
-    if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/EMG") { //Chest Acc
+    if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/EMG") {
         // is_hb = pbuff.ecg();
-        state[6] = pbuff.mean(); //mean
-        state[7] = pbuff.stddev(); //std 
-        state[8] = pbuff.dom_fq(); //fq
+        state[4] = pbuff.mean(); //mean
+        state[5] = pbuff.stddev(); //std 
+        state[6] = pbuff.dom_fq(); //fq
     }
-    if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/EDA") { //Chest Acc
-        state[9] = pbuff.mean(); //mean
+    if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/EDA") {
+        state[7] = pbuff.mean(); //mean
     }
-    if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/Temp") { //Chest Acc
+    if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/Temp") {
     }
-    if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/Resp") { //Chest Acc
+    if constexpr (ConfigList[ConfigIndex].path == "/signal/chest/Resp") {
     }
-    if constexpr (ConfigList[ConfigIndex].path == "/signal/wrist/ACC") { //Chest Acc
+    if constexpr (ConfigList[ConfigIndex].path == "/signal/wrist/ACC") {
         arma::vec x = pbuff.col(0);
         arma::vec y = pbuff.col(1);
         arma::vec z = pbuff.col(2);
@@ -337,22 +347,22 @@ inline int FeatureProcessor<ConfigIndex>::calc_feature(std::array<double, Config
         double std_mean = xstd + ystd + zstd;
         double acc_min  = xmean + ymean + zmean;
         double acc_std = xstd + ystd + zstd;
-        state[10] = xmean;
-        state[11] = xmax;
-        state[12] = xmin;
+        state[8] = xmean;
+        // state[11] = xmax;
+        // state[12] = xmin;
 
     }
-    if constexpr (ConfigList[ConfigIndex].path == "/signal/wrist/BVP") { //Chest Acc
-        state[13] = pbuff.hr_mean(); //mean hr
-        state[14] = pbuff.hr_std(); //std hr
-        state[15] = pbuff.hrv_mean(); //mean hrv
-        state[16] = pbuff.hrv_std(); //std hrv
+    if constexpr (ConfigList[ConfigIndex].path == "/signal/wrist/BVP") {
+        state[9] = pbuff.hr_mean(); //mean hr
+        // state[14] = pbuff.hr_std(); //std hr
+        state[10] = pbuff.hrv_mean(); //mean hrv
+        // state[16] = pbuff.hrv_std(); //std hrv
     }
-    if constexpr (ConfigList[ConfigIndex].path == "/signal/wrist/EDA") { //Chest Acc
-        state[17] = pbuff.mean(); //mean hr
+    if constexpr (ConfigList[ConfigIndex].path == "/signal/wrist/EDA") {
+        state[11] = pbuff.mean(); //mean hr
     }
-    if constexpr (ConfigList[ConfigIndex].path == "/signal/wrist/TEMP") { //Chest Acc
-        state[18] = pbuff.mean(); //mean hr
+    if constexpr (ConfigList[ConfigIndex].path == "/signal/wrist/TEMP") {
+        state[12] = pbuff.mean(); //mean hr
     }
     return 0;
 }
