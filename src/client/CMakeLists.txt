@@ -4,6 +4,7 @@ add_library(client INTERFACE
 
 add_executable(client-bin
                run_client.cpp
+               xgboost_model/main.c
                )
 
 find_package(HDF5 REQUIRED COMPONENTS C)
@@ -39,6 +40,7 @@ target_include_directories(client-bin PUBLIC
                            ${Boost_INCLUDE_DIRS}
                            ${ARMADILLO_INCLUDE_DIRS}
                            Cpp_Ecg_Detectors
+                           xgboost_model
                           )
 
 target_link_libraries (client-bin

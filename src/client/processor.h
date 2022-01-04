@@ -13,7 +13,7 @@
 #include "client.h"
 #include "data_config.h"
 #include "realtime/Detectors.h"
-
+#include "header.h"
 /** 
  * @brief Continously loops through DataQueue's and processes data.
  * @tparam ConfigIndex Index of the data stream in ConfigList.
@@ -249,14 +249,26 @@ private:
  * Continously calls proc_all_feats which loops through DataQueue's and processes data.
  * @returns Runs indefinitely
  */
+
+void xgboost_fmt(std::array<double, NumberOfFeatures> in, Entry* arr) {
+    for (size_t i = 0; i < NumberOfFeatures; i++) {
+        arr[i].missing = 0;
+        arr[i].fvalue = in[i];
+        arr[i].qvalue = 0;
+    }
+}
+
+
 inline int Processor::run() {
     std::cout << "Config sz = " << std::size(ConfigList) << std::endl;
     std::vector<std::future<int>> v;
     init_feature_procs<std::size(ConfigList)-1>(v);
+    Entry[NumberOfFeatures] entry;
     while(1) {
         if (print_state_bool) {
             std::this_thread::sleep_for(std::chrono::milliseconds(print_state_delay_ms));
             print_state(state);
+            predict(Entry*(state.data()), 0);
         }
     }
     return 0;
